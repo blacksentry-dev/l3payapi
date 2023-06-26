@@ -25,9 +25,10 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"first_name","last_name","phone_number","email", "password", "password_confirmation"},
+     *               required={"first_name","last_name","username","phone_number","email", "password", "password_confirmation"},
      *               @OA\Property(property="first_name", type="text"),
      *               @OA\Property(property="last_name", type="text"),
+     *               @OA\Property(property="username", type="text"),
      *               @OA\Property(property="phone_number", type="text"),
      *               @OA\Property(property="email", type="text"),
      *               @OA\Property(property="password", type="password"),
@@ -62,6 +63,7 @@ class RegisterController extends BaseController
             'phone_number' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'username' => 'required|string|max:255|unique:users',
         ]);
    
         if($validator->fails()){
