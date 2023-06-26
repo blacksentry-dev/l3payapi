@@ -104,12 +104,12 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "email",
+                                    "username",
                                     "password"
                                 ],
                                 "properties": {
-                                    "email": {
-                                        "type": "email"
+                                    "username": {
+                                        "type": "username"
                                     },
                                     "password": {
                                         "type": "password"

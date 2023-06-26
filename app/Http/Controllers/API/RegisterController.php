@@ -74,9 +74,9 @@ class RegisterController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
+        $success['Name'] =  $user->first_name;
    
-        return $this->sendResponse($success, 'User register successfully.');
+        return $this->sendResponse($success, 'User signed up successfully.');
     }
 
 
@@ -93,8 +93,8 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"email", "password"},
-     *               @OA\Property(property="email", type="email"),
+     *               required={"username", "password"},
+     *               @OA\Property(property="username", type="username"),
      *               @OA\Property(property="password", type="password")
      *            ),
      *        ),
@@ -120,12 +120,12 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
+        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['name'] =  $user->name;
+            $success['Name'] =  $user->first_name;
    
-            return $this->sendResponse($success, 'User login successfully.');
+            return $this->sendResponse($success, 'User signed in successfully.');
         } 
         else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
