@@ -131,4 +131,79 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
     }
+
+
+    /**
+     * @OA\Put(
+     *     path="/api/users/profile",
+     *     operationId="UpdateProfile",
+     *     tags={"Profile"},
+     *     summary="Update User Profile",
+     *     description="Update user profile information",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"address"},
+     *               @OA\Property(property="first_name", type="string"),
+     *               @OA\Property(property="last_name", type="string"),
+     *               @OA\Property(property="address", type="string"),
+     *            ),
+     *        ),
+     *    ),
+     *    @OA\Response(
+     *        response=201,
+     *        description="Profile updated successfully",
+     *        @OA\JsonContent()
+     *    ),
+     *    @OA\Response(
+     *        response=401,
+     *        description="Unauthorized",
+     *        @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(response=400, description="Bad request"),
+     *    @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
+        public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $this->getUserFromToken($request->bearerToken());
+
+        if (!$user) {
+            return $this->sendError('Invalid token', [], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'address' => 'string',
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $user = Auth::user();
+        $user->email = $request->input('email');
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->address = $request->input('address');
+        $user->save();
+    
+        return $this->sendResponse(['status' => 'success'], 'Profile details validated.');
+    }
+
+    private function getUserFromToken(string $token)
+    {
+        $payload = Auth::guard('api')->payload();
+
+        if (!$payload || !$payload->get('sub')) {
+            return null;
+        }
+
+        return User::find($payload->get('sub'));
+    }
 }

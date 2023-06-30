@@ -22,4 +22,6 @@ Route::post('login', [RegisterController::class, 'login']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
+    Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
+
 });
