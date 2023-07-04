@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Validator;
-use Illuminate\Http\JsonResponse;
    
 class RegisterController extends BaseController
 {
@@ -205,5 +207,80 @@ class RegisterController extends BaseController
         }
 
         return User::find($payload->get('sub'));
+    }
+
+
+     /**
+     * @OA\Post(
+     *     path="/api/users/send-registration-otp",
+     *     operationId="sendRegistrationOTP",
+     *     tags={"Registration Email"},
+     *     summary="Send Registration OTP",
+     *     description="Send a registration OTP (One-Time Password) to the user's email for verification.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"email", "first_name", "last_name"},
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="first_name", type="string"),
+     *             @OA\Property(property="last_name", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Registration OTP sent successfully.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+
+     public function sendRegistrationOTP(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $email = $request->input('email');
+        $firstName = $request->input('first_name');
+        $lastName = $request->input('last_name');
+
+        $otp = $this->generateOTP();
+        $this->sendEmailOTP($email, $firstName, $lastName, $otp);
+
+        return $this->sendResponse(['status' => 'success'], 'Registration OTP sent successfully.');
+    }
+
+    // Generate Otp
+    private function generateOTP(): string
+    {
+        // Generate a random 6-digit OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // You can customize the OTP generation logic as per your requirements
+
+        return $otp;
+    }
+
+    private function sendEmailOTP(string $email, string $firstName, string $lastName, string $otp)
+    {
+        // Construct the email message
+        $message = "Hello $firstName $lastName,\n\n";
+        $message .= "Thank you for registering with our service. Please use the following OTP to verify your email address:\n";
+        $message .= "$otp\n\n";
+        $message .= "If you didn't sign up for this service, please disregard this email.\n";
+
+        // Send the email
+        Mail::raw($message, function ($emailMessage) use ($email) {
+            $emailMessage->to($email)
+                ->subject('Email Verification OTP');
+        });
     }
 }

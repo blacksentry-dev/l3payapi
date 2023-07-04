@@ -221,6 +221,62 @@
                     }
                 ]
             }
+        },
+        "/api/users/send-registration-otp": {
+            "post": {
+                "tags": [
+                    "Registration Email"
+                ],
+                "summary": "Send Registration OTP",
+                "description": "Send a registration OTP (One-Time Password) to the user's email for verification.",
+                "operationId": "sendRegistrationOTP",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "first_name",
+                                    "last_name"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registration OTP sent successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
