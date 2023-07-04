@@ -212,10 +212,10 @@ class RegisterController extends BaseController
 
      /**
      * @OA\Post(
-     *     path="/api/users/send-registration-otp",
-     *     operationId="sendRegistrationOTP",
+     *     path="/api/users/send-registration-email",
+     *     operationId="sendRegistrationEmail",
      *     tags={"Registration Email"},
-     *     summary="Send Registration OTP",
+     *     summary="Send Registration Email",
      *     description="Send a registration OTP (One-Time Password) to the user's email for verification.",
      *     security={{ "bearerAuth":{} }},
      *     @OA\RequestBody(

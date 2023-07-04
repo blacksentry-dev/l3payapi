@@ -222,14 +222,14 @@
                 ]
             }
         },
-        "/api/users/send-registration-otp": {
+        "/api/users/send-registration-email": {
             "post": {
                 "tags": [
                     "Registration Email"
                 ],
-                "summary": "Send Registration OTP",
+                "summary": "Send Registration Email",
                 "description": "Send a registration OTP (One-Time Password) to the user's email for verification.",
-                "operationId": "sendRegistrationOTP",
+                "operationId": "sendRegistrationEmail",
                 "requestBody": {
                     "content": {
                         "application/json": {
