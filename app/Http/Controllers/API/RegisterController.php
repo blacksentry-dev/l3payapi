@@ -75,8 +75,20 @@ class RegisterController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+
+        if(!$user){
+            return $this->sendError('Something went wrong, please try again.', $user->errors());    
+        }
+
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['Name'] =  $user->first_name;
+
+        $email = $user->email;
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $otp = $this->generateOTP();
+        $this->sendEmailOTP($email, $firstName, $lastName, $otp);
    
         return $this->sendResponse($success, 'User signed up successfully.');
     }
@@ -210,54 +222,7 @@ class RegisterController extends BaseController
     }
 
 
-     /**
-     * @OA\Post(
-     *     path="/api/users/send-registration-email",
-     *     operationId="sendRegistrationEmail",
-     *     tags={"Registration Email"},
-     *     summary="Send Registration Email",
-     *     description="Send a registration OTP (One-Time Password) to the user's email for verification.",
-     *     security={{ "bearerAuth":{} }},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             required={"email", "first_name", "last_name"},
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="first_name", type="string"),
-     *             @OA\Property(property="last_name", type="string"),
-     *         ),
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Registration OTP sent successfully.",
-     *         @OA\JsonContent()
-     *     ),
-     *     @OA\Response(response=400, description="Bad request"),
-     *     @OA\Response(response=401, description="Unauthorized"),
-     * )
-     */
-
-     public function sendRegistrationOTP(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-
-        $email = $request->input('email');
-        $firstName = $request->input('first_name');
-        $lastName = $request->input('last_name');
-
-        $otp = $this->generateOTP();
-        $this->sendEmailOTP($email, $firstName, $lastName, $otp);
-
-        return $this->sendResponse(['status' => 'success'], 'Registration OTP sent successfully.');
-    }
-
+    
     // Generate Otp
     private function generateOTP(): string
     {
