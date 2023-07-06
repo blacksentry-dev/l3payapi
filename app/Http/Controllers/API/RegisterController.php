@@ -89,6 +89,7 @@ class RegisterController extends BaseController
 
         $otp = $this->generateOTP();
         $this->sendEmailOTP($email, $firstName, $lastName, $otp);
+        $this->storeOTPInCache($email, $otp);
    
         return $this->sendResponse($success, 'User signed up successfully.');
     }
@@ -247,5 +248,68 @@ class RegisterController extends BaseController
             $emailMessage->to($email)
                 ->subject('Email Verification OTP');
         });
+    }
+
+    private function storeOTPInCache(string $email, string $otp)
+    {
+        $expiration = now()->addMinutes(15);
+        Cache::put($email, $otp, $expiration);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users/verify-email",
+     *     operationId="verifyEmail",
+     *     tags={"Verification"},
+     *     summary="Verify Email",
+     *     description="Verify the user's email using the OTP (One-Time Password) sent during registration.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"email", "otp"},
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="otp", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Email verification successful.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="User not found"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
+    public function verifyEmail(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'otp' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $email = $request->input('email');
+        $otp = $request->input('otp');
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+
+        $storedOTP = $this->getStoredOTPFromCache($email);
+
+        if (!$storedOTP || $storedOTP !== $otp) {
+            return $this->sendError('Invalid OTP.', [], 400);
+        }
+
+        $user->email_verified = true;
+        $user->save();
+
+        return $this->sendResponse(['status' => 'success'], 'Email verification successful.');
     }
 }

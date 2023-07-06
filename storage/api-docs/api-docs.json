@@ -222,31 +222,27 @@
                 ]
             }
         },
-        "/api/users/send-registration-email": {
+        "/api/users/verify-email": {
             "post": {
                 "tags": [
-                    "Registration Email"
+                    "Verification"
                 ],
-                "summary": "Send Registration Email",
-                "description": "Send a registration OTP (One-Time Password) to the user's email for verification.",
-                "operationId": "sendRegistrationEmail",
+                "summary": "Verify Email",
+                "description": "Verify the user's email using the OTP (One-Time Password) sent during registration.",
+                "operationId": "verifyEmail",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
                                     "email",
-                                    "first_name",
-                                    "last_name"
+                                    "otp"
                                 ],
                                 "properties": {
                                     "email": {
                                         "type": "string"
                                     },
-                                    "first_name": {
-                                        "type": "string"
-                                    },
-                                    "last_name": {
+                                    "otp": {
                                         "type": "string"
                                     }
                                 },
@@ -257,7 +253,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Registration OTP sent successfully.",
+                        "description": "Email verification successful.",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -266,6 +262,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "User not found"
                     },
                     "401": {
                         "description": "Unauthorized"
