@@ -263,7 +263,9 @@ class RegisterController extends BaseController
      *     tags={"Verification"},
      *     summary="Verify Email",
      *     description="Verify the user's email using the OTP (One-Time Password) sent during registration.",
-     *     security={{ "bearerAuth":{} }},
+     *     security={
+     *          {"passport": {}},
+     *      },
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             required={"email", "otp"},
@@ -283,6 +285,7 @@ class RegisterController extends BaseController
      */
     public function verifyEmail(Request $request): JsonResponse
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'otp' => 'required|string',
@@ -292,10 +295,17 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
+        
         $email = $request->input('email');
         $otp = $request->input('otp');
 
-        $user = User::where('email', $email)->first();
+        $user = Auth::user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        // $user = User::where('email', $email)->first();
 
         if (!$user) {
             return $this->sendError('User not found.', [], 404);
