@@ -2,14 +2,15 @@
    
 namespace App\Http\Controllers\API;
    
+use Validator;
+use App\Models\Otp;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\User;
-use Validator;
    
 class RegisterController extends BaseController
 {
@@ -88,8 +89,13 @@ class RegisterController extends BaseController
         $lastName = $user->last_name;
 
         $otp = $this->generateOTP();
+        Otp::create([
+            'otp' => $otp,
+            'expiration' => now()->addMinutes(15),
+            'user_id' => $user->id,
+        ]);
         $this->sendEmailOTP($email, $firstName, $lastName, $otp);
-        $this->storeOTPInCache($email, $otp);
+        // $this->storeOTPInCache($email, $otp);
    
         return $this->sendResponse($success, 'User signed up successfully.');
     }
@@ -250,11 +256,11 @@ class RegisterController extends BaseController
         });
     }
 
-    private function storeOTPInCache(string $email, string $otp)
-    {
-        $expiration = now()->addMinutes(15);
-        Cache::put($email, $otp, $expiration);
-    }
+    // private function storeOTPInCache(string $email, string $otp)
+    // {
+    //     $expiration = now()->addMinutes(15);
+    //     Cache::put($email, $otp, $expiration);
+    // }
 
     /**
      * @OA\Post(
