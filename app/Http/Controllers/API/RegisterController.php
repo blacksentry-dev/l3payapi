@@ -6,6 +6,7 @@ use Validator;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -98,6 +99,33 @@ class RegisterController extends BaseController
         // $this->storeOTPInCache($email, $otp);
    
         return $this->sendResponse($success, 'User signed up successfully.');
+    }
+
+    
+    // Generate Otp
+    private function generateOTP(): string
+    {
+        // Generate a random 6-digit OTP
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // You can customize the OTP generation logic as per your requirements
+
+        return $otp;
+    }
+
+    private function sendEmailOTP(string $email, string $firstName, string $lastName, string $otp)
+    {
+        // Construct the email message
+        $message = "Hello $firstName $lastName,\n\n";
+        $message .= "Thank you for registering with our service. Please use the following OTP to verify your email address:\n";
+        $message .= "$otp\n\n";
+        $message .= "If you didn't sign up for this service, please disregard this email.\n";
+
+        // Send the email
+        Mail::raw($message, function ($emailMessage) use ($email) {
+            $emailMessage->to($email)
+                ->subject('Email Verification OTP');
+        });
     }
 
 
@@ -227,105 +255,97 @@ class RegisterController extends BaseController
 
         return User::find($payload->get('sub'));
     }
-
-
-    
-    // Generate Otp
-    private function generateOTP(): string
-    {
-        // Generate a random 6-digit OTP
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-        // You can customize the OTP generation logic as per your requirements
-
-        return $otp;
-    }
-
-    private function sendEmailOTP(string $email, string $firstName, string $lastName, string $otp)
-    {
-        // Construct the email message
-        $message = "Hello $firstName $lastName,\n\n";
-        $message .= "Thank you for registering with our service. Please use the following OTP to verify your email address:\n";
-        $message .= "$otp\n\n";
-        $message .= "If you didn't sign up for this service, please disregard this email.\n";
-
-        // Send the email
-        Mail::raw($message, function ($emailMessage) use ($email) {
-            $emailMessage->to($email)
-                ->subject('Email Verification OTP');
-        });
-    }
-
-    // private function storeOTPInCache(string $email, string $otp)
-    // {
-    //     $expiration = now()->addMinutes(15);
-    //     Cache::put($email, $otp, $expiration);
-    // }
+   
 
     /**
      * @OA\Post(
      *     path="/api/users/verify-email",
      *     operationId="verifyEmail",
-     *     tags={"Verification"},
+     *     tags={"Email Verification"},
      *     summary="Verify Email",
-     *     description="Verify the user's email using the OTP (One-Time Password) sent during registration.",
-     *     security={
-     *          {"passport": {}},
-     *      },
+     *     description="Verify user's email using the OTP.",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             required={"email", "otp"},
-     *             @OA\Property(property="email", type="string"),
-     *             @OA\Property(property="otp", type="string"),
-     *         ),
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"otp"},
+     *               @OA\Property(property="otp", type="string"),
+     *            ),
+     *        ),
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Email verification successful.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *         ),
      *     ),
-     *     @OA\Response(response=400, description="Bad request"),
-     *     @OA\Response(response=404, description="User not found"),
-     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request",
+     *         @OA\JsonContent(),
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Invalid OTP",
+     *         @OA\JsonContent(),
+     *     ),
      * )
      */
+    
     public function verifyEmail(Request $request): JsonResponse
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
             'otp' => 'required|string',
         ]);
-
+    
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
-        
-        $email = $request->input('email');
+    
         $otp = $request->input('otp');
+        $otpModel = Otp::findByOtp($otp);
 
-        $user = Auth::user();
-
-        // Check if the user is authenticated
-        if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        if (!$otpModel) {
+            return $this->sendError('Invalid OTP.', [], 400);
         }
-        // $user = User::where('email', $email)->first();
+
+        // Check if the OTP has expired
+        if ($otpModel->expiration < now()) {
+            return $this->sendError('OTP has expired.', [], 400);
+        }
+
+        // Retrieve the associated user details
+        $user = $this->getUserFromOtp($otpModel);
 
         if (!$user) {
             return $this->sendError('User not found.', [], 404);
         }
 
-        $storedOTP = $this->getStoredOTPFromCache($email);
-
-        if (!$storedOTP || $storedOTP !== $otp) {
-            return $this->sendError('Invalid OTP.', [], 400);
-        }
-
-        $user->email_verified = true;
+        // Update the user's email_verified field to true
+        $user->markEmailAsVerified();
         $user->save();
 
-        return $this->sendResponse(['status' => 'success'], 'Email verification successful.');
+        return $this->sendResponse(['status' => 'success', 'user' => $user], 'Email verification successful.'); 
+
+       
+        // return $otp;
+    
+
+    }
+
+    private function getUserFromOtp(Otp $otpModel): ?User
+    {
+        return User::find($otpModel->user_id);
+    }
+
+    public function markEmailAsVerified()
+    {
+        $this->verified = true;
+        $this->email_verified_at = Carbon::now();
+        $this->save();
     }
 }

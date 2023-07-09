@@ -225,29 +225,26 @@
         "/api/users/verify-email": {
             "post": {
                 "tags": [
-                    "Verification"
+                    "Email Verification"
                 ],
                 "summary": "Verify Email",
-                "description": "Verify the user's email using the OTP (One-Time Password) sent during registration.",
+                "description": "Verify user's email using the OTP.",
                 "operationId": "verifyEmail",
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "email",
-                                    "otp"
-                                ],
+                                "required": [],
                                 "properties": {
-                                    "email": {
-                                        "type": "string"
-                                    },
                                     "otp": {
                                         "type": "string"
                                     }
                                 },
                                 "type": "object"
                             }
+                        },
+                        "application/json": {
+                            "schema": {}
                         }
                     }
                 },
@@ -256,25 +253,35 @@
                         "description": "Email verification successful.",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
                     "400": {
-                        "description": "Bad request"
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "User not found"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
+                        "description": "Invalid OTP",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         }
     },

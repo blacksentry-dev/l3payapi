@@ -19,11 +19,11 @@ use App\Http\Controllers\API\ProductController;
   
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
     Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
     Route::post('/users/send-registration-email', [RegisterController::class, 'sendRegistrationOTP']);
-    Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
 
 });
