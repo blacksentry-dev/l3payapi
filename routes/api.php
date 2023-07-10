@@ -22,6 +22,7 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
 Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
+Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);

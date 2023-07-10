@@ -69,9 +69,65 @@ class FeedbackController extends BaseController
         $feedback->rating = $request->input('rating');
         $feedback->save();
         
-        return $this->sendResponse(['status' => 'success', 'feedback' => $feedback], 'Cest bonne le feedback.');
+        return $this->sendResponse(['status' => 'success', 'feedback' => $feedback], 'Feedback submitted successfully.');
         
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/feedback/user/{user_id}",
+     *     operationId="getUserFeedback",
+     *     tags={"Feedback"},
+     *     summary="Get User Feedback",
+     *     description="Get feedback and rating for a specific user.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="ID of the user",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User feedback retrieved successfully.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="User not found")
+     * )
+     */
+
+    public function getUserFeedback(Request $request): JsonResponse
+    {
+        $user_id = 40; // Hardcoded user ID
+    
+        // Retrieve feedback for the user
+        $feedback = Feedback::where('user_id', $user_id)->first();
+    
+        if (!$feedback) {
+            return $this->sendError('User feedback not found.', [], 404);
+        }
+
+        $data = [
+            'user_id' => $feedback->user_id,
+            'feedback' => $feedback->feedback,
+            'rating' => $feedback->rating,
+        ];
+
+        return $this->sendResponse(['status' => 'success', 'data' => $data], 'User feedback retrived successfully.');
+
+    }
+
+
+
+
+
+
 
     public function index()
     {
