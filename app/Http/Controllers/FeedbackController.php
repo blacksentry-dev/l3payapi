@@ -123,6 +123,36 @@ class FeedbackController extends BaseController
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/rating/average",
+     *     operationId="getAverageRating",
+     *     tags={"Feedback"},
+     *     summary="Get Average Rating",
+     *     description="Get the average rating for all feedback.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Average rating retrieved successfully.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized")
+     * )
+     */
+
+    public function getAverageFeedback(Request $request): JsonResponse
+    {
+        $averageRating = Feedback::avg('rating');
+        // dd($averageRating);
+        
+        $data = [
+            'averageRating' => round($averageRating, 1),
+        ];
+
+        return $this->sendResponse(['status' => 'success', 'data' => $data], 'This is the average of all L3pay app ratings.');
+
+    }
+
 
 
 

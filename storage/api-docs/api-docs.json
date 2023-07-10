@@ -398,6 +398,34 @@
                     }
                 ]
             }
+        },
+        "/api/rating/average": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Average Rating",
+                "description": "Get the average rating for all feedback.",
+                "operationId": "getAverageRating",
+                "responses": {
+                    "200": {
+                        "description": "Average rating retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
