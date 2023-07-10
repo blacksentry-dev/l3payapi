@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use App\Models\User;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Validator;
 use App\Http\Requests\StoreFeedbackRequest;
 use App\Http\Requests\UpdateFeedbackRequest;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -14,6 +15,35 @@ class FeedbackController extends BaseController
 {
     /**
      * Display a listing of the resource.
+     */
+
+     /**
+     * @OA\Post(
+     *     path="/api/feedback",
+     *     operationId="submitFeedback",
+     *     tags={"Feedback"},
+     *     summary="Submit Feedback and Rating",
+     *     description="Allow users to provide feedback and ratings on their experience.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "feedback", "rating"},
+     *             @OA\Property(property="user_id", type="string"),
+     *             @OA\Property(property="feedback", type="string"),
+     *             @OA\Property(property="rating", type="number", format="float"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Feedback submitted successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Feedback submitted successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=422, description="Unprocessable Entity"),
+     *     @OA\Response(response=404, description="User not found"),
+     * )
      */
     public function submitFeedback(Request $request) :JsonResponse
     {
@@ -26,9 +56,20 @@ class FeedbackController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        
 
-        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
+        $user = User::find($request->input('user_id'));
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+
+        $feedback = new Feedback();
+        $feedback->user_id = $user->id;
+        $feedback->feedback = $request->input('feedback');
+        $feedback->rating = $request->input('rating');
+        $feedback->save();
+        
+        return $this->sendResponse(['status' => 'success', 'feedback' => $feedback], 'Cest bonne le feedback.');
         
     }
 
