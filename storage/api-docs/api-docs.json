@@ -234,7 +234,9 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [],
+                                "required": [
+                                    "otp"
+                                ],
                                 "properties": {
                                     "otp": {
                                         "type": "string"
@@ -280,6 +282,73 @@
                                 "schema": {}
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/feedback": {
+            "post": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Submit Feedback and Rating",
+                "description": "Allow users to provide feedback and ratings on their experience.",
+                "operationId": "submitFeedback",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "feedback",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string"
+                                    },
+                                    "feedback": {
+                                        "type": "string"
+                                    },
+                                    "rating": {
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Feedback submitted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Feedback submitted successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
