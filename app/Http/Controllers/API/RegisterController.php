@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Validator;
 use App\Models\Otp;
 use App\Models\User;
+use App\ValidationRules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -219,15 +220,15 @@ class RegisterController extends BaseController
      */
         public function updateProfile(Request $request): JsonResponse
     {
-        $user = $this->getUserFromToken($request->bearerToken());
 
-        if (!$user) {
-            return $this->sendError('Invalid token', [], 401);
-        }
+        // $validator = Validator::make($request->all(), ValidationRules::rules());
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'string',
-            'last_name' => 'string',
+            'first_name' => 'string|max:255',
+            'last_name' => 'string|max:255',
+            'username' => 'string',
+            'phone' => 'string',
+            'email' => 'string|email|max:255',
             'address' => 'string',
         ]);
     
@@ -235,14 +236,12 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $user = Auth::user();
-        $user->email = $request->input('email');
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->address = $request->input('address');
-        $user->save();
+        $email = $request->input('email');
+        dd($email);
+        // $user = $this->getUserByEmail($email);
+        
     
-        return $this->sendResponse(['status' => 'success'], 'Profile details validated.');
+        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
     }
 
     private function getUserFromToken(string $token)
@@ -254,6 +253,11 @@ class RegisterController extends BaseController
         }
 
         return User::find($payload->get('sub'));
+    }
+
+    private function getUserByEmail($email)
+    {
+        return User::where('email', $email)->first();
     }
    
 

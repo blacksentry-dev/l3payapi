@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
   
@@ -24,9 +24,9 @@ Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
 Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
 Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
 Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback']);
+Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
-    Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
     Route::post('/users/send-registration-email', [RegisterController::class, 'sendRegistrationOTP']);
 });
