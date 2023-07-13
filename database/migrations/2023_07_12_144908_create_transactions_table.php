@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('type'); // 'credit' or 'debit'
+            $table->string('description');
+            $table->decimal('amount', 10, 2);
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

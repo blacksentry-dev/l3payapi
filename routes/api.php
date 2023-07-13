@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
-  
+use App\Http\Controllers\API\WalletController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,10 +22,14 @@ use App\Http\Controllers\API\RegisterController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
+Route::put('/users/profile/{user_id}', [RegisterController::class, 'updateProfile']);
+//Feedback and Rating
 Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
 Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
 Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback']);
-Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
+//Wallet Payment
+Route::post('/wallet/create/{user_id}', [WalletController::class, 'createUsersWallet']);
+Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
