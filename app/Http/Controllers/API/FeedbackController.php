@@ -104,7 +104,7 @@ class FeedbackController extends BaseController
 
     public function getUserFeedback(Request $request): JsonResponse
     {
-        $user_id = 40; // Hardcoded user ID
+        $user_id = 1; // Hardcoded user ID
     
         // Retrieve feedback for the user
         $feedback = Feedback::where('user_id', $user_id)->first();

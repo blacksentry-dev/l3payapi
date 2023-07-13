@@ -22,7 +22,7 @@ use App\Http\Controllers\API\WalletController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
-Route::put('/users/profile/{user_id}', [RegisterController::class, 'updateProfile']);
+Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
 //Feedback and Rating
 Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
 Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);

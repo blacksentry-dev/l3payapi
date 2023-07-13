@@ -5,6 +5,147 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/feedback": {
+            "post": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Submit Feedback and Rating",
+                "description": "Allow users to provide feedback and ratings on their experience.",
+                "operationId": "submitFeedback",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "feedback",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string"
+                                    },
+                                    "feedback": {
+                                        "type": "string"
+                                    },
+                                    "rating": {
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Feedback submitted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Feedback submitted successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/api/feedback/user/{user_id}": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get User Feedback",
+                "description": "Get feedback and rating for a specific user.",
+                "operationId": "getUserFeedback",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User feedback retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rating/average": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Average Rating",
+                "description": "Get the average rating for all feedback.",
+                "operationId": "getAverageRating",
+                "responses": {
+                    "200": {
+                        "description": "Average rating retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -286,33 +427,24 @@
                 }
             }
         },
-        "/api/feedback": {
+        "/api/wallet/create/{user_id}": {
             "post": {
                 "tags": [
-                    "Feedback"
+                    "Wallet"
                 ],
-                "summary": "Submit Feedback and Rating",
-                "description": "Allow users to provide feedback and ratings on their experience.",
-                "operationId": "submitFeedback",
+                "summary": "Create Wallet",
+                "description": "Create a wallet for a user.",
+                "operationId": "createWallet",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "user_id",
-                                    "feedback",
-                                    "rating"
+                                    "user_id"
                                 ],
                                 "properties": {
                                     "user_id": {
                                         "type": "string"
-                                    },
-                                    "feedback": {
-                                        "type": "string"
-                                    },
-                                    "rating": {
-                                        "type": "number",
-                                        "format": "float"
                                     }
                                 },
                                 "type": "object"
@@ -322,7 +454,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Feedback submitted successfully.",
+                        "description": "Wallet created successfully.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -333,7 +465,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Feedback submitted successfully."
+                                            "example": "Wallet created successfully."
                                         }
                                     },
                                     "type": "object"
@@ -344,87 +476,10 @@
                     "400": {
                         "description": "Bad request"
                     },
-                    "422": {
-                        "description": "Unprocessable Entity"
-                    },
                     "404": {
                         "description": "User not found"
                     }
                 }
-            }
-        },
-        "/api/feedback/user/{user_id}": {
-            "get": {
-                "tags": [
-                    "Feedback"
-                ],
-                "summary": "Get User Feedback",
-                "description": "Get feedback and rating for a specific user.",
-                "operationId": "getUserFeedback",
-                "parameters": [
-                    {
-                        "name": "user_id",
-                        "in": "path",
-                        "description": "ID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User feedback retrieved successfully.",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/rating/average": {
-            "get": {
-                "tags": [
-                    "Feedback"
-                ],
-                "summary": "Get Average Rating",
-                "description": "Get the average rating for all feedback.",
-                "operationId": "getAverageRating",
-                "responses": {
-                    "200": {
-                        "description": "Average rating retrieved successfully.",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
             }
         }
     },
