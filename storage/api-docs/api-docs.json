@@ -541,6 +541,59 @@
                     }
                 }
             }
+        },
+        "/api/wallet/balance": {
+            "get": {
+                "tags": [
+                    "Wallet"
+                ],
+                "summary": "Get Wallet Balance",
+                "description": "Retrieve the balance of the user's wallet.",
+                "operationId": "getWalletBalance",
+                "responses": {
+                    "200": {
+                        "description": "Wallet balance retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "string",
+                                                    "example": "123456789"
+                                                },
+                                                "balance": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 150
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Wallet not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {

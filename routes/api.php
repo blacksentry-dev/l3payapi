@@ -30,6 +30,7 @@ Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback'])
 //Wallet Payment
 Route::post('/wallet/create/{user_id}', [WalletController::class, 'createUsersWallet']);
 Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
+Route::get('/wallet/balance', [WalletController::class, 'getWalletBalance']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);

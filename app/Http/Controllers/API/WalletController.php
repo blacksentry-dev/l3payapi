@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreWalletRequest;
 use App\Http\Requests\UpdateWalletRequest;
 use App\Http\Controllers\API\BaseController;
+use Illuminate\Http\Client\Request as ClientRequest;
 
 class WalletController extends BaseController
 {
@@ -42,7 +43,7 @@ class WalletController extends BaseController
      */
     public function createUsersWallet($user_id): JsonResponse
     {
-        $user_id = 40;
+        $user_id = 5;
         $user = User::find($user_id);
         // dd($user);
 
@@ -124,6 +125,52 @@ class WalletController extends BaseController
         return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
 
     }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/wallet/balance",
+     *     operationId="getWalletBalance",
+     *     tags={"Wallet"},
+     *     summary="Get Wallet Balance",
+     *     description="Retrieve the balance of the user's wallet.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Wallet balance retrieved successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="user_id", type="string", example="123456789"),
+     *                 @OA\Property(property="balance", type="number", format="float", example=150.00),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="Wallet not found"),
+     * )
+     */
+
+    public function getWalletBalance(Request $request): JsonResponse
+    {
+        $user_id = 5;
+        $wallet = Wallet::where('user_id', $user_id)->first();
+
+        if (!$wallet) {
+            return $this->sendError('Wallet not found.', [], 404);
+        }
+
+        $balance = $wallet->amount;
+
+        $data = [
+            'user_id' => $user_id,
+            'balance' => $balance,
+        ];
+
+        return $this->sendResponse(['status' => 'success','data' => $data], 'Wallet balance retrieved successfully.');
+
+    }
+
     /**
      * Display a listing of the resource.
      */
