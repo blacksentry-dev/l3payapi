@@ -68,6 +68,33 @@ class WalletController extends BaseController
     }
     
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/wallet/fund",
+     *     operationId="fundWallet",
+     *     tags={"Wallet"},
+     *     summary="Fund Wallet",
+     *     description="Fund the user's wallet with a specified amount.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "amount"},
+     *             @OA\Property(property="user_id", type="string"),
+     *             @OA\Property(property="amount", type="number", format="float"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Wallet funded successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Cest bonne.")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="User not found"),
+     * )
+     */
     public function fundWallet(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -90,9 +117,8 @@ class WalletController extends BaseController
 
         // Perform the necessary actions to fund the wallet
         $wallet = $user->wallet;
-        dd($wallet);
-
-        $wallet->balance += $amount;
+        $wallet->amount += $amount;
+        // dd($wallet->amount);
         $wallet->save();
 
         return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
