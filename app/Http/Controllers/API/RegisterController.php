@@ -221,24 +221,30 @@ class RegisterController extends BaseController
         public function updateProfile(Request $request): JsonResponse
     {
 
-        // $validator = Validator::make($request->all(), ValidationRules::rules());
-
         $validator = Validator::make($request->all(), [
-            'first_name' => 'string|max:255',
-            'last_name' => 'string|max:255',
-            'username' => 'string',
-            'phone' => 'string',
-            'email' => 'string|email|max:255',
-            'address' => 'string',
+            'first_name' => 'string|max:255|nullable',
+            'last_name' => 'string|max:255|nullable',
+            'address' => 'string|nullable',
         ]);
     
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $email = $request->input('email');
-        dd($email);
-        // $user = $this->getUserByEmail($email);
+        $user_id = 5;
+        $user = User::find($user_id);
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+
+        if ($request->filled(['first_name', 'last_name', 'address'])) {
+            $user->update([
+                'first_name' => $request->input('first_name', $user->first_name),
+                'last_name' => $request->input('last_name', $user->last_name),
+                'address' => $request->input('address', $user->address),
+            ]);
+        }
         
     
         return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
