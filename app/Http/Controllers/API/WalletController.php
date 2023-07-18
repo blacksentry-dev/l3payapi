@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Validator;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreWalletRequest;
@@ -202,7 +203,15 @@ class WalletController extends BaseController
 
         $user->wallet->amount -= $paymentAmount;
         $user->wallet->save();
-        dd($user->wallet);
+
+        // Create a new wallet payment transaction record
+        Transaction::create([
+            'user_id' => $user->id,
+            'type' => 'wallet',
+            'description' => "Payment for bill {$billId}",
+            'amount' => $paymentAmount,
+        ]);
+        // dd($user->wallet);
 
         return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
     }
