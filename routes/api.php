@@ -23,6 +23,8 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
 Route::put('/users/profile', [RegisterController::class, 'updateProfile']);
+Route::post('/users/forgot-password', [RegisterController::class, 'forgotPassword']);
+
 //Feedback and Rating
 Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
 Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
@@ -31,6 +33,7 @@ Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback'])
 Route::post('/wallet/create/{user_id}', [WalletController::class, 'createUsersWallet']);
 Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
 Route::get('/wallet/balance', [WalletController::class, 'getWalletBalance']);
+Route::post('/wallet/payment', [WalletController::class, 'makeWalletPayment']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);

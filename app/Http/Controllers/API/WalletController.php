@@ -171,6 +171,11 @@ class WalletController extends BaseController
 
     }
 
+    public function makeWalletPayment(Request $request): JsonResponse
+    {
+        dd($request);
+    }
+
     /**
      * Display a listing of the resource.
      */
