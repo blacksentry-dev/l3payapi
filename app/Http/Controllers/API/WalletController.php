@@ -122,7 +122,7 @@ class WalletController extends BaseController
         // dd($wallet->amount);
         $wallet->save();
 
-        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
+        return $this->sendResponse(['status' => 'success'], 'Wallet successfully funded.');
 
     }
 
@@ -173,7 +173,38 @@ class WalletController extends BaseController
 
     public function makeWalletPayment(Request $request): JsonResponse
     {
-        dd($request);
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'payment_amount' => 'required|numeric|min:0',
+            'bill_id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $user = User::find($request->input('user_id'));
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+
+        $paymentAmount = $request->input('payment_amount');
+        $billId = $request->input('bill_id');
+
+        // Check if the user's wallet balance is sufficient to cover the payment
+        if ($user->wallet->amount < $paymentAmount) {
+            return $this->sendError('Insufficient wallet balance.', [], 400);
+        }
+
+        // Perform the necessary actions to process the wallet payment
+        // For this example, we'll just deduct the payment amount from the user's wallet balance
+
+        $user->wallet->amount -= $paymentAmount;
+        $user->wallet->save();
+        dd($user->wallet);
+
+        return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
     }
 
     /**
