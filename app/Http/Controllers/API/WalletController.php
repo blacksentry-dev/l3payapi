@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Validator;
+use App\Models\Bill;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Transaction;
@@ -172,6 +173,38 @@ class WalletController extends BaseController
 
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/wallet/payment",
+     *     operationId="walletPayment",
+     *     tags={"Wallet"},
+     *     summary="Make a payment from the user's wallet",
+     *     description="Make a payment from the user's wallet balance.",
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "payment_amount", "bill_id"},
+     *             @OA\Property(property="user_id", type="string"),
+     *             @OA\Property(property="payment_amount", type="number", format="float"),
+     *             @OA\Property(property="bill_id", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Payment successful.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Payment successful.")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="User not found"),
+     *     @OA\Response(response=422, description="Unprocessable Entity"),
+     * )
+     */
+
     public function makeWalletPayment(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -185,13 +218,15 @@ class WalletController extends BaseController
         }
 
         $user = User::find($request->input('user_id'));
+        $bill = Bill::find($request->input('bill_id'));
 
         if (!$user) {
             return $this->sendError('User not found.', [], 404);
         }
 
         $paymentAmount = $request->input('payment_amount');
-        $billId = $request->input('bill_id');
+        // $billId = $request->input('bill_id');
+        $billDescription = $bill->description;
 
         // Check if the user's wallet balance is sufficient to cover the payment
         if ($user->wallet->amount < $paymentAmount) {
@@ -204,14 +239,14 @@ class WalletController extends BaseController
         $user->wallet->amount -= $paymentAmount;
         $user->wallet->save();
 
-        // Create a new wallet payment transaction record
+
+        //Create a new wallet payment transaction record
         Transaction::create([
             'user_id' => $user->id,
             'type' => 'wallet',
-            'description' => "Payment for bill {$billId}",
+            'description' => "Payment for {$billDescription} bill",
             'amount' => $paymentAmount,
         ]);
-        // dd($user->wallet);
 
         return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
     }

@@ -6,6 +6,7 @@ use Validator;
 use App\Models\Otp;
 use App\Models\User;
 use App\ValidationRules;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -358,4 +359,52 @@ class RegisterController extends BaseController
         $this->email_verified_at = Carbon::now();
         $this->save();
     }
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $user = User::where('email', $request->input('email'))->first();
+
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
+        
+        // Generate a unique password reset token
+        $token = Str::random(60);
+
+        // Store the token in the password_resets table
+        $user->password_reset_token()->create([
+            'email' => $user->email,
+            'token' => $token,
+        ]);
+
+        // Send the password reset email
+        Mail::to($user->email)->send(new PasswordResetMail($token));
+
+        // dd($user->passwordReset);
+
+        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
+    }
+
+    // private function sendResetPasswordMail(string $email, string $firstName, string $lastName, string $otp)
+    // {
+    //     // Construct the email message
+    //     $message = "Hello $firstName $lastName,\n\n";
+    //     $message .= "Click the link to reset your password:\n";
+    //     $message .= "$otp\n\n";
+    //     $message .= "If you didn't sign up for this service, please disregard this email.\n";
+
+    //     // Send the email
+    //     Mail::raw($message, function ($emailMessage) use ($email) {
+    //         $emailMessage->to($email)
+    //             ->subject('Email Verification OTP');
+    //     });
+    // }
 }
