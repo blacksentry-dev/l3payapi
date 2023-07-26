@@ -110,7 +110,7 @@ class RegisterController extends BaseController
                 'expiration' => now()->addMinutes(15),
                 'user_id' => $user->id,
             ]);
-            //$this->sendEmailOTP($email, $firstName, $lastName, $otp);
+            $this->sendEmailOTP($email, $firstName, $lastName, $otp);
            
             return $this->returnSuccess($success, 'User signed up successfully.');
         } catch (\Throwable $th) {
@@ -186,7 +186,7 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
             if(!empty($user->email_verified_at)){
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
@@ -374,7 +374,7 @@ class RegisterController extends BaseController
             $user->verified = 1;
             $user->save();
 
-            return $this->sendResponse(['status' => 'success', 'user' => $user], 'Email verification successful.'); 
+            return $this->returnSuccess($user, 'Email verification successful.');
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         }       
