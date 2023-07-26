@@ -9,7 +9,9 @@ use App\ValidationRules;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Mail\PasswordResetMail;
 use Illuminate\Http\JsonResponse;
+use App\Models\PasswordResetToken;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
@@ -380,10 +382,10 @@ class RegisterController extends BaseController
         $token = Str::random(60);
 
         // Store the token in the password_resets table
-        $user->password_reset_token()->create([
-            'email' => $user->email,
-            'token' => $token,
-        ]);
+        PasswordResetToken::updateOrCreate(
+            ['email' => $user->email],
+            ['token' => $token]
+        );
 
         // Send the password reset email
         Mail::to($user->email)->send(new PasswordResetMail($token));
