@@ -210,14 +210,11 @@ class RegisterController extends BaseController
      *     security={{ "bearerAuth":{} }},
      *     @OA\RequestBody(
      *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
      *               required={""},
      *               @OA\Property(property="address", type="string"),
      *            ),
-     *        ),
      *    ),
      *    @OA\Response(
      *        response=201,
@@ -244,6 +241,15 @@ class RegisterController extends BaseController
                 return $this->returnError('User not found.', 404);
             }
 
+            $existingData = [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'username' => $user->username,
+                'phone_number' => $user->phone_number,
+                'email' => $user->email,
+                'address' => $user->address,
+            ];
+
             if ($request->has('first_name') && empty($request->input('first_name'))) {
                 return $this->returnError('Validation Error', 'First name field can not be empty');
             }
@@ -268,12 +274,12 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Address field can not be empty');
             }
 
-            $user->first_name = $request->input('first_name');
-            $user->last_name = $request->input('last_name');
-            $user->username = $request->input('username');
-            $user->phone_number = $request->input('phone_number');
-            $user->email = $request->input('email');
-            $user->address = $request->input('address');
+            $user->first_name = $request->input('first_name', $user->first_name);
+            $user->last_name = $request->input('last_name', $user->last_name);
+            $user->username = $request->input('username', $user->username);
+            $user->phone_number = $request->input('phone_number', $user->phone_number);
+            $user->email = $request->input('email', $user->email);
+            $user->address = $request->input('address', $user->address);
 
             $user->save();
 
@@ -285,6 +291,7 @@ class RegisterController extends BaseController
                 'email' => $user->email,
                 'address' => $user->address,
             ];
+
            
             return $this->returnSuccess($success, 'Profile updated successfully.');
         } catch (\Throwable $th) {

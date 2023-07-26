@@ -308,19 +308,6 @@
                 "operationId": "UpdateProfile",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    ""
-                                ],
-                                "properties": {
-                                    "address": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
                         "application/json": {
                             "schema": {}
                         }
