@@ -202,7 +202,7 @@ class RegisterController extends BaseController
 
     /**
      * @OA\Put(
-     *     path="/api/users/profile",
+     *     path="/api/users/profile-update",
      *     operationId="UpdateProfile",
      *     tags={"Profile"},
      *     summary="Update User Profile",
@@ -214,9 +214,7 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"address"},
-     *               @OA\Property(property="first_name", type="string"),
-     *               @OA\Property(property="last_name", type="string"),
+     *               required={""},
      *               @OA\Property(property="address", type="string"),
      *            ),
      *        ),
@@ -238,33 +236,60 @@ class RegisterController extends BaseController
         public function updateProfile(Request $request): JsonResponse
     {
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'string|max:255|nullable',
-            'last_name' => 'string|max:255|nullable',
-            'address' => 'string|nullable',
-        ]);
-    
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
+        try {
+            $user_id = 1;
+            $user = User::find($user_id);
 
-        $user_id = 5;
-        $user = User::find($user_id);
+            if (!$user) {
+                return $this->returnError('User not found.', 404);
+            }
 
-        if (!$user) {
-            return $this->sendError('User not found.', [], 404);
-        }
+            if ($request->has('first_name') && empty($request->input('first_name'))) {
+                return $this->returnError('Validation Error', 'First name field can not be empty');
+            }
 
-        if ($request->filled(['first_name', 'last_name', 'address'])) {
-            $user->update([
-                'first_name' => $request->input('first_name', $user->first_name),
-                'last_name' => $request->input('last_name', $user->last_name),
-                'address' => $request->input('address', $user->address),
-            ]);
-        }
-        
-    
-        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
+            if ($request->has('last_name') && empty($request->input('last_name'))) {
+                return $this->returnError('Validation Error', 'Last name field can not be empty');
+            }
+
+            if ($request->has('username') && empty($request->input('username'))) {
+                return $this->returnError('Validation Error', 'Username field can not be empty');
+            }
+
+            if ($request->has('phone_number') && empty($request->input('phone_number'))) {
+                return $this->returnError('Validation Error', 'Phone number field can not be empty');
+            }
+
+            if ($request->has('email') && empty($request->input('email'))) {
+                return $this->returnError('Validation Error', 'Email field can not be empty');
+            }
+
+            if ($request->has('address') && empty($request->input('address'))) {
+                return $this->returnError('Validation Error', 'Address field can not be empty');
+            }
+
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
+            $user->username = $request->input('username');
+            $user->phone_number = $request->input('phone_number');
+            $user->email = $request->input('email');
+            $user->address = $request->input('address');
+
+            $user->save();
+
+            $success = [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'username' => $user->username,
+                'phone_number' => $user->phone_number,
+                'email' => $user->email,
+                'address' => $user->address,
+            ];
+           
+            return $this->returnSuccess($success, 'Profile updated successfully.');
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }    
     }
 
     private function getUserFromToken(string $token)

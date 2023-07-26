@@ -298,7 +298,7 @@
                 }
             }
         },
-        "/api/users/profile": {
+        "/api/users/profile-update": {
             "put": {
                 "tags": [
                     "Profile"
@@ -311,15 +311,9 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "address"
+                                    ""
                                 ],
                                 "properties": {
-                                    "first_name": {
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "type": "string"
-                                    },
                                     "address": {
                                         "type": "string"
                                     }
