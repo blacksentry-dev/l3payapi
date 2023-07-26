@@ -346,7 +346,7 @@ class RegisterController extends BaseController
             $user->verified = 1;
             $user->save();
 
-            return $this->sendResponse(['status' => 'success', 'user' => $user], 'Email verification successful.'); 
+            return $this->returnSuccess($user, 'Email verification successful.');
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         }       
