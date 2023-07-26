@@ -6,6 +6,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use App\Models\User;
 
 
 class BaseController extends Controller
@@ -47,5 +48,38 @@ class BaseController extends Controller
 
 
         return response()->json($response, $code);
+    }
+
+    public function returnSuccess($result, $message, $code = 200){
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'code' => $code,
+            'data' => $result
+        ], $code);
+    }
+
+    public function returnError($message, $error, $code = 401){
+        return response()->json([
+            'status' => false,
+            'message' => $message,
+            'code' => $code,
+            'errors' => $error
+        ], $code);
+    }
+
+    function isEmailExistsInDatabase($email)
+    {
+        return User::where('email', $email)->exists();
+    }
+
+    function isUsernameExistsInDatabase($username)
+    {
+        return User::where('username', $username)->exists();
+    }
+
+    function isPhoneExistsInDatabase($phone)
+    {
+        return User::where('phone_number', $phone)->exists();
     }
 }

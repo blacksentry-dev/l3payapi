@@ -65,44 +65,57 @@ class RegisterController extends BaseController
      */
     public function register(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone_number' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'username' => 'required|string|max:255|unique:users',
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+
+        try {
+            if ($request->has('first_name') && empty($request->input('first_name'))) {
+                return $this->returnError('Validation Error', 'Firstname field can not be empty');
+            }
+
+            if ($request->has('last_name') && empty($request->input('last_name'))) {
+                return $this->returnError('Validation Error', 'Lastname field can not be empty');
+            }
+
+            if ($this->isEmailExistsInDatabase($request->input('email'))) {
+                return $this->returnError('Validation Error', 'Email already taken');
+            }
+
+            if ($this->isUsernameExistsInDatabase($request->input('username'))) {
+                return $this->returnError('Validation Error', 'Username already in use');
+            }
+
+            if ($this->isPhoneExistsInDatabase($request->input('phone_number'))) {
+                return $this->returnError('Validation Error', 'Phone Number already in use');
+            }
+
+
+
+            $input = $request->all();
+            $input['password'] = bcrypt($input['password']);
+            $user = User::create($input);
+
+            if (!$user) {
+                return $this->sendError('Something went wrong, please try again.', $user->errors());
+            }
+
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
+            $success['name'] =  $user->first_name;
+
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
+
+            $otp = $this->generateOTP();
+            Otp::create([
+                'otp' => $otp,
+                'expiration' => now()->addMinutes(15),
+                'user_id' => $user->id,
+            ]);
+            //$this->sendEmailOTP($email, $firstName, $lastName, $otp);
+           
+            return $this->returnSuccess($success, 'User signed up successfully.');
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
         }
-   
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-
-        if(!$user){
-            return $this->sendError('Something went wrong, please try again.', $user->errors());    
-        }
-
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['Name'] =  $user->first_name;
-
-        $email = $user->email;
-        $firstName = $user->first_name;
-        $lastName = $user->last_name;
-
-        $otp = $this->generateOTP();
-        Otp::create([
-            'otp' => $otp,
-            'expiration' => now()->addMinutes(15),
-            'user_id' => $user->id,
-        ]);
-        $this->sendEmailOTP($email, $firstName, $lastName, $otp);
-        // $this->storeOTPInCache($email, $otp);
-   
-        return $this->sendResponse($success, 'User signed up successfully.');
     }
 
     
@@ -175,13 +188,14 @@ class RegisterController extends BaseController
     {
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['Name'] =  $user->first_name;
-   
-            return $this->sendResponse($success, 'User signed in successfully.');
-        } 
-        else{ 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            if(!empty($user->email_verified_at)){
+                $success['token'] =  $user->createToken('MyApp')->accessToken;
+                $success['user'] =  $user;
+                return $this->returnSuccess($success, 'User signed up successfully.');
+            }
+            return $this->returnError('Error', "You have not verified your email", 410);
+        }else{ 
+            return $this->returnError('Error', 'Invalid username or password', 401);
         } 
     }
 
@@ -310,103 +324,39 @@ class RegisterController extends BaseController
     
     public function verifyEmail(Request $request): JsonResponse
     {
+        try {
 
-        $validator = Validator::make($request->all(), [
-            'otp' => 'required|string',
-        ]);
-    
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-    
-        $otp = $request->input('otp');
-        $otpModel = Otp::findByOtp($otp);
+            if ($request->has('otp') && empty($request->input('otp'))) {
+                return $this->returnError('Validation Error', 'Otp field can not be empty', 401);
+            }
+            
+            $otpModel = Otp::findByOtp($request->input('otp'));
 
-        if (!$otpModel) {
-            return $this->sendError('Invalid OTP.', [], 400);
-        }
+            if (!$otpModel) {
+                return $this->returnError('Validation Error', 'Invalid OTP', 404);
+            }
 
-        // Check if the OTP has expired
-        if ($otpModel->expiration < now()) {
-            return $this->sendError('OTP has expired.', [], 400);
-        }
+            if ($otpModel->expiration < now()) {
+                return $this->returnError('Validation Error', 'OTP has expired', 410);
+            }
 
-        // Retrieve the associated user details
-        $user = $this->getUserFromOtp($otpModel);
+            $user = $this->getUserFromOtp($otpModel);
+            if (!$user) {
+                return $this->returnError('Error', 'User not found', 404);
+            }
 
-        if (!$user) {
-            return $this->sendError('User not found.', [], 404);
-        }
+            $user->markEmailAsVerified();
+            $user->verified = 1;
+            $user->save();
 
-        // Update the user's email_verified field to true
-        $user->markEmailAsVerified();
-        $user->save();
-
-        return $this->sendResponse(['status' => 'success', 'user' => $user], 'Email verification successful.'); 
-
-       
-        // return $otp;
-    
-
+            return $this->sendResponse(['status' => 'success', 'user' => $user], 'Email verification successful.'); 
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }       
     }
 
     private function getUserFromOtp(Otp $otpModel): ?User
     {
         return User::find($otpModel->user_id);
     }
-
-    public function markEmailAsVerified()
-    {
-        $this->verified = true;
-        $this->email_verified_at = Carbon::now();
-        $this->save();
-    }
-
-    public function forgotPassword(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-
-        $user = User::where('email', $request->input('email'))->first();
-
-        if (!$user) {
-            return $this->sendError('User not found.', [], 404);
-        }
-        
-        // Generate a unique password reset token
-        $token = Str::random(60);
-
-        // Store the token in the password_resets table
-        PasswordResetToken::updateOrCreate(
-            ['email' => $user->email],
-            ['token' => $token]
-        );
-
-        // Send the password reset email
-        Mail::to($user->email)->send(new PasswordResetMail($token));
-
-        // dd($user->passwordReset);
-
-        return $this->sendResponse(['status' => 'success'], 'Cest bonne.');
-    }
-
-    // private function sendResetPasswordMail(string $email, string $firstName, string $lastName, string $otp)
-    // {
-    //     // Construct the email message
-    //     $message = "Hello $firstName $lastName,\n\n";
-    //     $message .= "Click the link to reset your password:\n";
-    //     $message .= "$otp\n\n";
-    //     $message .= "If you didn't sign up for this service, please disregard this email.\n";
-
-    //     // Send the email
-    //     Mail::raw($message, function ($emailMessage) use ($email) {
-    //         $emailMessage->to($email)
-    //             ->subject('Email Verification OTP');
-    //     });
-    // }
 }
