@@ -107,7 +107,7 @@ class RegisterController extends BaseController
                 'expiration' => now()->addMinutes(15),
                 'user_id' => $user->id,
             ]);
-            //$this->sendEmailOTP($email, $firstName, $lastName, $otp);
+            $this->sendEmailOTP($email, $firstName, $lastName, $otp);
            
             return $this->returnSuccess($success, 'User signed up successfully.');
         } catch (\Throwable $th) {
