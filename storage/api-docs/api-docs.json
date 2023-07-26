@@ -408,6 +408,47 @@
                 }
             }
         },
+        "/api/users/resend-otp": {
+            "post": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Resend OTP to the user's email",
+                "description": "Resend OTP to the user's email if they have not been verified or if the previous OTP has expired.",
+                "operationId": "resendOtp",
+                "responses": {
+                    "200": {
+                        "description": "OTP resent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "email": {
+                                            "type": "string",
+                                            "example": "user@example.com"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP resent successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/wallet/create/{user_id}": {
             "post": {
                 "tags": [

@@ -391,4 +391,67 @@ class RegisterController extends BaseController
     {
         return User::find($otpModel->user_id);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users/resend-otp",
+     *     operationId="resendOtp",
+     *     tags={"Email Verification"},
+     *     summary="Resend OTP to the user's email",
+     *     description="Resend OTP to the user's email if they have not been verified or if the previous OTP has expired.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OTP resent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", example="user@example.com"),
+     *             @OA\Property(property="message", type="string", example="OTP resent successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=404, description="User not found"),
+     *     @OA\Response(response=500, description="Internal server error"),
+     * )
+     */
+    public function resendOtp(Request $request): JsonResponse
+    {
+        try {
+            $user_id = 1;
+            $user = User::find($user_id);
+
+            if (!$user) {
+                return $this->returnError('User not found.', 404);
+            }
+
+            if ($user->verified == 1) {
+                return $this->returnError('User already verified.', 409);
+            }
+
+            $existingOtp = Otp::where('user_id', $user->id)->first();
+            
+            if ($existingOtp) {
+                if ($existingOtp->expiration > now()) {
+                    return $this->returnError('OTP already sent.', 400);
+                }
+
+                $otp = $this->generateOTP();
+
+                $existingOtp->update([
+                    'otp' => $otp,
+                    'expiration' => now()->addMinutes(15),
+                ]);
+            } else {
+                $otp = $this->generateOTP();
+    
+                Otp::create([
+                    'otp' => $otp,
+                    'expiration' => now()->addMinutes(15),
+                    'user_id' => $user->id,
+                ]);
+            }
+
+            return $this->returnSuccess('Otp resent successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        } 
+    }
 }
