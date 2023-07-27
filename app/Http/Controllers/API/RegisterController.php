@@ -450,7 +450,7 @@ class RegisterController extends BaseController
                 ]);
             }
 
-            return $this->returnSuccess('Otp resent successfully.', 200);
+            return $this->returnSuccess($otp, 'Otp resent successfully.', 200);
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         } 
@@ -511,7 +511,7 @@ class RegisterController extends BaseController
 
             $this->sendPasswordResetEmail($email, $firstName, $lastName, $otp);
 
-            return $this->returnSuccess('Reset passwaord Otp sent successfully.', 200);
+            return $this->returnSuccess($otp, 'Reset passwaord Otp sent successfully.', 200);
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         }     
