@@ -27,8 +27,9 @@ class WalletController extends BaseController
      *     description="Create a wallet for a user.",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
-     *             required={"user_id"},
-     *             @OA\Property(property="user_id", type="string"),
+     *             required={"user_id", "amount"},
+     *             @OA\Property(property="user_id", type="integer"),
+     *             @OA\Property(property="amount", type="double"),
      *         ),
      *     ),
      *     @OA\Response(

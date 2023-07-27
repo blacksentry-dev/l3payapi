@@ -534,11 +534,16 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "user_id"
+                                    "user_id",
+                                    "amount"
                                 ],
                                 "properties": {
                                     "user_id": {
-                                        "type": "string"
+                                        "type": "integer"
+                                    },
+                                    "amount": {
+                                        "type": "number",
+                                        "format": "double"
                                     }
                                 },
                                 "type": "object"
