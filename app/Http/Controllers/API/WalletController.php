@@ -20,7 +20,7 @@ class WalletController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/api/wallet/create/{user_id}",
+     *     path="/api/wallet/create",
      *     operationId="createWallet",
      *     tags={"Wallet"},
      *     summary="Create Wallet",

@@ -521,7 +521,7 @@
                 }
             }
         },
-        "/api/wallet/create/{user_id}": {
+        "/api/wallet/create": {
             "post": {
                 "tags": [
                     "Wallet"
