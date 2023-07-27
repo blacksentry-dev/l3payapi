@@ -46,10 +46,10 @@ class WalletController extends BaseController
      */
     public function createUsersWallet(Request $request): JsonResponse
     {
-        $user = User::find($request->user_id);
+        $userwallet = Wallet::where('user_id', $request->user_id)->first();
 
         try {
-            if ($user->wallet) {
+            if (!empty($userwallet)) {
                 $userwallet = Wallet::where('user_id', $request->user_id)->first();
                 $userwallet->amount = $userwallet->amount + $request->amount;
                 return $this->returnSuccess($userwallet, 'Wallet updated successfully.', 200);

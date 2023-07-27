@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTransactionRequest;
 
 class TransactionController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */
