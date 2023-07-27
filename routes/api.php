@@ -31,7 +31,7 @@ Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
 Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
 Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback']);
 //Wallet Payment
-Route::post('/wallet/create/{user_id}', [WalletController::class, 'createUsersWallet']);
+Route::post('/wallet/create', [WalletController::class, 'createUsersWallet']);
 Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
 Route::get('/wallet/balance', [WalletController::class, 'getWalletBalance']);
 Route::post('/wallet/payment', [WalletController::class, 'makeWalletPayment']);

@@ -43,31 +43,27 @@ class WalletController extends BaseController
      *     @OA\Response(response=404, description="User not found"),
      * )
      */
-    public function createUsersWallet($user_id): JsonResponse
+    public function createUsersWallet(Request $request): JsonResponse
     {
-        $user_id = 5;
-        $user = User::find($user_id);
-        // dd($user);
+        $user = User::find($request->user_id);
 
-        if (!$user) {
-            return $this->sendError('User not found.', [], 404);
-        }
-
-        // Check if the user already has a wallet
-        if ($user->wallet) {
-            return $this->sendError('Wallet already exists for the user.', [], 400);
-        }
-
-        // Create a new wallet for the user
-        $wallet = new Wallet();
-        $wallet->user_id = $user_id;
-        $wallet->amount = 0.00;
-        $wallet->date_created = now();
-        $wallet->status = 'active';
-        $wallet->save();
-
-        return $this->sendResponse(['status' => 'success'], 'Successfully created users wallet.');
-
+        try {
+            if ($user->wallet) {
+                $userwallet = Wallet::where('user_id', $request->user_id)->first();
+                $userwallet->amount = $userwallet->amount + $request->amount;
+                return $this->returnSuccess($userwallet, 'Wallet updated successfully.', 200);
+            }else{
+                $wallet = new Wallet();
+                $wallet->user_id = $request->user_id;
+                $wallet->amount = $request->amount;
+                $wallet->date_created = now();
+                $wallet->status = 'active';
+                $wallet->save();
+                return $this->returnSuccess($wallet, 'Wallet created successfully.', 200);
+            }
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        } 
     }
     
 
