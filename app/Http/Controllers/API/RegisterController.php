@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use App\Mail\PasswordResetMail;
 use Illuminate\Http\JsonResponse;
 use App\Models\PasswordResetToken;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
@@ -453,5 +454,66 @@ class RegisterController extends BaseController
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         } 
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users/forgot-password",
+     *     operationId="forgotPassword",
+     *     tags={"Forgot Password"},
+     *     summary="Send password reset OTP",
+     *     description="Send a one-time password (OTP) to the user's email for password reset.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success: OTP sent successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Reset password OTP sent successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="User not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal Server Error.")
+     *         )
+     *     ),
+     * )
+     */
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        try {
+            $user_id = 1;
+            $user = User::find($user_id);
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
+
+            if (!$user) {
+                return $this->returnError('User not found.', 404);
+            }
+
+            $otp = $this->generateOTP();
+
+            DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $user->email],
+                ['otp' => $otp, 'created_at' => now()]
+            );
+
+            $this->sendPasswordResetEmail($email, $firstName, $lastName, $otp);
+
+            return $this->returnSuccess('Reset passwaord Otp sent successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }     
     }
 }

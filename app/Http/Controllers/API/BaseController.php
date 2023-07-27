@@ -4,9 +4,10 @@
 namespace App\Http\Controllers\API;
 
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller as Controller;
 
 
 class BaseController extends Controller
@@ -81,5 +82,18 @@ class BaseController extends Controller
     function isPhoneExistsInDatabase($phone)
     {
         return User::where('phone_number', $phone)->exists();
+    }
+
+    protected function sendPasswordResetEmail(string $email, string $firstName, string $lastName, string $otp): void
+    {
+        $message = "Hello $firstName $lastName,\n\n";
+        $message .= "You have requested to reset you password. Please use the following OTP to reset your password:\n";
+        $message .= "$otp\n\n";
+        $message .= "If you didn't sign up for this service, please disregard this email.\n";
+
+        Mail::raw($message, function ($emailMessage) use ($email) {
+            $emailMessage->to($email)
+                ->subject('Password Reset OTP');
+        });
     }
 }
