@@ -49,10 +49,12 @@ class WalletController extends BaseController
         $userwallet = Wallet::where('user_id', $request->user_id)->first();
 
         try {
-            if (!empty($userwallet)) {
+            if (!is_null($userwallet)) {
                 $userwallet = Wallet::where('user_id', $request->user_id)->first();
-                $userwallet->amount = $userwallet->amount + $request->amount;
-                return $this->returnSuccess($userwallet, 'Wallet updated successfully.', 200);
+                $wallet = Wallet::find($userwallet->id);
+                $wallet->amount = sprintf("%.2f", $userwallet->amount) + sprintf("%.2f", $request->amount);
+                $wallet->save();
+                return $this->returnSuccess($wallet, 'Wallet updated successfully.', 200);
             }else{
                 $wallet = new Wallet();
                 $wallet->user_id = $request->user_id;
