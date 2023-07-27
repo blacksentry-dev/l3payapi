@@ -516,4 +516,5 @@ class RegisterController extends BaseController
             return $this->returnError('Error', $th->getMessage(), 500);
         }     
     }
+    
 }
