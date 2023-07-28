@@ -144,7 +144,7 @@ class TransactionController extends BaseController
      */
     public function getUserTransaction($user_id){
         try {
-            $transaction = Transaction::where('user_id', $user_id)->get();
+            $transaction = Transaction::where('user_id', $user_id)->orderBy('id', 'DESC')->get();
             if(count($transaction) > 0){
                 return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
             }else{
