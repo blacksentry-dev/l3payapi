@@ -188,7 +188,7 @@ class TransactionController extends BaseController
     /**
      * @OA\GET(
      *     path="/api/user/monthly-transaction/{user_id}",
-     *     operationId="getUserTotalTransaction",
+     *     operationId="getUserTotalMonthlyTransaction",
      *     tags={"Transaction"},
      *     summary="Get User Total Transactions",
      *     description="Get all transactions for a user.",
