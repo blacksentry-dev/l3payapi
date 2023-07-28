@@ -81,6 +81,7 @@ class TransactionController extends BaseController
      *             @OA\Property(property="user_id", type="integer"),
      *             @OA\Property(property="type", type="string"),
      *             @OA\Property(property="description", type="string"),
+     *             @OA\Property(property="category", type="string"),
      *             @OA\Property(property="amount", type="double"),
      *         ),
      *     ),
@@ -102,6 +103,7 @@ class TransactionController extends BaseController
             $transaction->user_id = $request->user_id;
             $transaction->type = $request->type;
             $transaction->description = $request->description;
+            $transaction->category = $request->category;
             $transaction->amount = $request->amount;
             $transaction->save();
             return $this->returnSuccess($transaction, 'Transaction created successfully.', 200);
