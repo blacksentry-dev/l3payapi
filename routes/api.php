@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\API\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,13 @@ Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback'])
 //Wallet Payment
 Route::post('/wallet/create', [WalletController::class, 'createUsersWallet']);
 Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
-Route::get('/wallet/balance', [WalletController::class, 'getWalletBalance']);
+Route::get('/wallet/balance/{user_id}', [WalletController::class, 'getWalletBalance']);
 Route::post('/wallet/payment', [WalletController::class, 'makeWalletPayment']);
+// Transaction
+Route::post('/user/transaction', [TransactionController::class, 'createTransaction']);
+Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'getUserTransaction']);
+Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
+Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);

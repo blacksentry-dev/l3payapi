@@ -130,12 +130,18 @@ class WalletController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/api/wallet/balance",
+     *     path="/api/wallet/balance/{user_id}",
      *     operationId="getWalletBalance",
      *     tags={"Wallet"},
      *     summary="Get Wallet Balance",
      *     description="Retrieve the balance of the user's wallet.",
      *     security={{ "bearerAuth":{} }},
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id"},
+     *             @OA\Property(property="user_id", type="integer"),
+     *         ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Wallet balance retrieved successfully.",
@@ -152,24 +158,17 @@ class WalletController extends BaseController
      * )
      */
 
-    public function getWalletBalance(Request $request): JsonResponse
+    public function getWalletBalance($user_id): JsonResponse
     {
-        $user_id = 5;
-        $wallet = Wallet::where('user_id', $user_id)->first();
-
-        if (!$wallet) {
-            return $this->sendError('Wallet not found.', [], 404);
+        try {
+            $wallet = Wallet::where('user_id', $user_id)->first();
+            if (!$wallet) {
+                return $this->returnError(null, 'Wallet not found', 404);
+            }
+            return $this->returnSuccess($wallet, 'User Wallet retrieved successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError("Error", $th->getMessage(), 500);
         }
-
-        $balance = $wallet->amount;
-
-        $data = [
-            'user_id' => $user_id,
-            'balance' => $balance,
-        ];
-
-        return $this->sendResponse(['status' => 'success','data' => $data], 'Wallet balance retrieved successfully.');
-
     }
 
 
