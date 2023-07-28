@@ -41,6 +41,7 @@ Route::post('/user/transaction', [TransactionController::class, 'createTransacti
 Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'getUserTransaction']);
 Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
 Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
+Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);

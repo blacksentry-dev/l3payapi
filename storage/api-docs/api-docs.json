@@ -745,6 +745,68 @@
                 }
             }
         },
+        "/api/user/user-transaction-category/{category}/{user_id}": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get Transactions By Category For User",
+                "description": "Get all transactions for a user in a categoty.",
+                "operationId": "getUserTransactionByCategory",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Transaction category",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        },
+                        "example": "wallet"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transactions retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Transactions retrieved successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "404": {
+                        "description": "Transaction not found"
+                    }
+                }
+            }
+        },
         "/api/wallet/create": {
             "post": {
                 "tags": [

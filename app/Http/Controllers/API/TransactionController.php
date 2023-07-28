@@ -237,4 +237,57 @@ class TransactionController extends BaseController
             return $this->returnError("Error", $th->getMessage(), 500);
         }
     }
+
+    /**
+     * @OA\GET(
+     *     path="/api/user/user-transaction-category/{category}/{user_id}",
+     *     operationId="getUserTransactionByCategory",
+     *     tags={"Transaction"},
+     *     summary="Get Transactions By Category For User",
+     *     description="Get all transactions for a user in a categoty.",
+     *     @OA\Parameter(
+     *          description="Transaction category",
+     *          in="path",
+     *          name="category",
+     *          required=true,
+     *          example="wallet",
+     *          @OA\Schema(
+     *              type="string",
+     *              format="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          description="ID of User",
+     *          in="path",
+     *          name="user_id",
+     *          required=true,
+     *          example="1",
+     *          @OA\Schema(
+     *              type="integer",
+     *              format="int64"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Transactions retrieved successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Transactions retrieved successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Internal Server Error"),
+     *     @OA\Response(response=404, description="Transaction not found"),
+     * )
+     */
+    public function getUserTransactionByCategory($category,$user_id)
+    {
+        try {
+            $transaction = Transaction::where('user_id', $user_id)
+            ->where('category', $category)
+            ->orderBy('id', 'DESC')->get();
+            return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError("Error", $th->getMessage(), 500);
+        }
+    }
 }
