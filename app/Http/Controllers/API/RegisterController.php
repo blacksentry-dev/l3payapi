@@ -35,11 +35,9 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"first_name","last_name","username","phone_number","email", "password", "password_confirmation"},
+     *               required={"first_name","last_name","email", "password", "password_confirmation"},
      *               @OA\Property(property="first_name", type="text"),
      *               @OA\Property(property="last_name", type="text"),
-     *               @OA\Property(property="username", type="text"),
-     *               @OA\Property(property="phone_number", type="text"),
      *               @OA\Property(property="email", type="text"),
      *               @OA\Property(property="password", type="password"),
      *               @OA\Property(property="password_confirmation", type="password")
@@ -81,13 +79,13 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Email already taken');
             }
 
-            if ($this->isUsernameExistsInDatabase($request->input('username'))) {
-                return $this->returnError('Validation Error', 'Username already in use');
-            }
+            // if ($this->isUsernameExistsInDatabase($request->input('username'))) {
+            //     return $this->returnError('Validation Error', 'Username already in use');
+            // }
 
-            if ($this->isPhoneExistsInDatabase($request->input('phone_number'))) {
-                return $this->returnError('Validation Error', 'Phone Number already in use');
-            }
+            // if ($this->isPhoneExistsInDatabase($request->input('phone_number'))) {
+            //     return $this->returnError('Validation Error', 'Phone Number already in use');
+            // }
 
 
 

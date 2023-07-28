@@ -161,8 +161,6 @@
                                 "required": [
                                     "first_name",
                                     "last_name",
-                                    "username",
-                                    "phone_number",
                                     "email",
                                     "password",
                                     "password_confirmation"
@@ -172,12 +170,6 @@
                                         "type": "text"
                                     },
                                     "last_name": {
-                                        "type": "text"
-                                    },
-                                    "username": {
-                                        "type": "text"
-                                    },
-                                    "phone_number": {
                                         "type": "text"
                                     },
                                     "email": {
