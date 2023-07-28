@@ -136,11 +136,16 @@ class WalletController extends BaseController
      *     summary="Get Wallet Balance",
      *     description="Retrieve the balance of the user's wallet.",
      *     security={{ "bearerAuth":{} }},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             required={"user_id"},
-     *             @OA\Property(property="user_id", type="integer"),
-     *         ),
+     *     @OA\Parameter(
+     *          description="ID of User",
+     *          in="path",
+     *          name="user_id",
+     *          required=true,
+     *          example="1",
+     *          @OA\Schema(
+     *              type="integer",
+     *              format="int64"
+     *          )
      *     ),
      *     @OA\Response(
      *         response=200,

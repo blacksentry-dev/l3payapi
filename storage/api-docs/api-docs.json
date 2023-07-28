@@ -600,23 +600,19 @@
                 "summary": "Get User Transactions",
                 "description": "Get all transactions for a user.",
                 "operationId": "getTransaction",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "user_id"
-                                ],
-                                "properties": {
-                                    "user_id": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Transactions retrieved successfully.",
@@ -655,23 +651,19 @@
                 "summary": "Get User Total Transactions",
                 "description": "Get all transactions for a user.",
                 "operationId": "getUserTotalTransaction",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "user_id"
-                                ],
-                                "properties": {
-                                    "user_id": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Transactions retrieved successfully.",
@@ -710,23 +702,19 @@
                 "summary": "Get User Total Transactions",
                 "description": "Get all transactions for a user.",
                 "operationId": "getUserTotalMonthlyTransaction",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "user_id"
-                                ],
-                                "properties": {
-                                    "user_id": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Transactions retrieved successfully.",
@@ -885,23 +873,19 @@
                 "summary": "Get Wallet Balance",
                 "description": "Retrieve the balance of the user's wallet.",
                 "operationId": "getWalletBalance",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "user_id"
-                                ],
-                                "properties": {
-                                    "user_id": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Wallet balance retrieved successfully.",
