@@ -160,8 +160,8 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"username", "password"},
-     *               @OA\Property(property="username", type="username"),
+     *               required={"email", "password"},
+     *               @OA\Property(property="email", type="text"),
      *               @OA\Property(property="password", type="password")
      *            ),
      *        ),

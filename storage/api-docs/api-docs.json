@@ -245,12 +245,12 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "username",
+                                    "email",
                                     "password"
                                 ],
                                 "properties": {
-                                    "username": {
-                                        "type": "username"
+                                    "email": {
+                                        "type": "text"
                                     },
                                     "password": {
                                         "type": "password"
