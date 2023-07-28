@@ -25,6 +25,7 @@ Route::post('login', [RegisterController::class, 'login']);
 Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
 Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
 Route::post('/users/forgot-password', [RegisterController::class, 'forgotPassword']);
+Route::post('/users/verify-password-otp/{user_id}', [RegisterController::class, 'verifyResetPasswordOtp']);
 Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
 
 //Feedback and Rating

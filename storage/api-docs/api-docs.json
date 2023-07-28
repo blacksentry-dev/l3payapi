@@ -457,6 +457,26 @@
                 "summary": "Send password reset OTP",
                 "description": "Send a one-time password (OTP) to the user's email for password reset.",
                 "operationId": "forgotPassword",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success: OTP sent successfully.",

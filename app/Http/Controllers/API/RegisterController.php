@@ -452,6 +452,17 @@ class RegisterController extends BaseController
      *     tags={"Forgot Password"},
      *     summary="Send password reset OTP",
      *     description="Send a one-time password (OTP) to the user's email for password reset.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"user_id"},
+     *               @OA\Property(property="user_id", type="integer"),
+     *            ),
+     *        ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Success: OTP sent successfully.",
@@ -481,7 +492,7 @@ class RegisterController extends BaseController
     public function forgotPassword(Request $request): JsonResponse
     {
         try {
-            $user = User::find($request->user_id);
+            $user = User::where('id', $request->user_id)->first();
             $email = $user->email;
             $firstName = $user->first_name;
             $lastName = $user->last_name;
