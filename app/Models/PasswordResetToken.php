@@ -11,4 +11,8 @@ class PasswordResetToken extends Model
     protected $fillable = [
         'email', 'token',
     ];
+    public static function findByOtp($otp)
+    {
+        return self::where('otp', $otp)->first();
+    }
 }

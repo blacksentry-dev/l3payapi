@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\API\BaseController as BaseController;
-   
+use App\Models\Transaction;
+
 class RegisterController extends BaseController
 {
 
@@ -235,7 +236,7 @@ class RegisterController extends BaseController
     {
 
         try {
-            $user = User::find($request->user_id);
+            $user = User::where('id', $request->user_id)->first();
 
             if (!$user) {
                 return $this->returnError('User not found.', 404);
@@ -406,7 +407,7 @@ class RegisterController extends BaseController
     public function resendOtp(Request $request): JsonResponse
     {
         try {
-            $user = User::find($request->user_id);
+            $user = User::where('id', $request->user_id)->first();
 
             if (!$user) {
                 return $this->returnError('User not found.', 404);
@@ -516,4 +517,28 @@ class RegisterController extends BaseController
         }     
     }
     
+    public function verifyResetPasswordOtp(Request $request): JsonResponse
+    {
+        try {
+            $user = User::where('id', $request->user_id)->first();
+
+            if ($request->has('otp') && empty($request->input('otp'))) {
+                return $this->returnError('Validation Error', 'Otp field can not be empty', 401);
+            }
+            
+            $otpModel = PasswordResetToken::findByOtp($request->input('otp'));
+
+            if (!$otpModel) {
+                return $this->returnError('Validation Error', 'Invalid OTP', 404);
+            }
+
+            if ($otpModel->expiration < now()) {
+                return $this->returnError('Validation Error', 'OTP has expired', 410);
+            }
+
+            return $this->returnSuccess('Reset password OTP verification successful.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }       
+    }
 }
