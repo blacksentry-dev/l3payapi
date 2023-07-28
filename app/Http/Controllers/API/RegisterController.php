@@ -235,21 +235,11 @@ class RegisterController extends BaseController
     {
 
         try {
-            $user_id = 1;
-            $user = User::find($user_id);
+            $user = User::find($request->user_id);
 
             if (!$user) {
                 return $this->returnError('User not found.', 404);
             }
-
-            $existingData = [
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'username' => $user->username,
-                'phone_number' => $user->phone_number,
-                'email' => $user->email,
-                'address' => $user->address,
-            ];
 
             if ($request->has('first_name') && empty($request->input('first_name'))) {
                 return $this->returnError('Validation Error', 'First name field can not be empty');
@@ -416,8 +406,7 @@ class RegisterController extends BaseController
     public function resendOtp(Request $request): JsonResponse
     {
         try {
-            $user_id = 1;
-            $user = User::find($user_id);
+            $user = User::find($request->user_id);
 
             if (!$user) {
                 return $this->returnError('User not found.', 404);
@@ -492,8 +481,7 @@ class RegisterController extends BaseController
     public function forgotPassword(Request $request): JsonResponse
     {
         try {
-            $user_id = 1;
-            $user = User::find($user_id);
+            $user = User::find($request->user_id);
             $email = $user->email;
             $firstName = $user->first_name;
             $lastName = $user->last_name;
