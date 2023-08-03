@@ -69,7 +69,7 @@ Route::get('/user/total-transaction/{user_id}', [TransactionController::class, '
 Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
 Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
 
-Route::get('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
+Route::post('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
 
 
 Route::middleware('auth:api')->group( function () {
