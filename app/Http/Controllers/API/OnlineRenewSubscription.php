@@ -144,7 +144,7 @@ class OnlineRenewSubscription extends BaseController
             if ($responseData["responsecode"] == 1) {
                 $success["totalEffectiveSessionTime"] = $responseData["responsemsg"]["totalEffectiveSessionTime"];
                 $success["upload"] = $responseData["responsemsg"]["result"];
-                return json_encode($responseData["responsemsg"]["result"]);
+                return json_decode($responseData["responsemsg"]["result"]);
                 // $success["download"] = $responseData["responsemsg"]["result"]["download"];
                 // $success["totaltransfer"] = $responseData["responsemsg"]["result"]["totaltransfer"];
                 return $this->returnSuccess($responseData["responsemsg"]["result"], 'Retrieved successfully.', 200);
