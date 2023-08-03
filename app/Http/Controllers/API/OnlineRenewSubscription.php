@@ -40,7 +40,7 @@ class OnlineRenewSubscription extends BaseController
      */
     public function RenewSubscription(Request $request)
     {
-        $url = 'http://selfserviceportal.layer3.ng:10080/24online/service/UserService/renewUser';
+        $url = 'http://102.164.36.86:10080/24online/service/UserService/renewUser';
 
         // Set the API request parameters as a JSON object
         $data = [
