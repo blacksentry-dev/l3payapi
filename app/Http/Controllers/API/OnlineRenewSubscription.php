@@ -126,7 +126,33 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
-    public function RenewalHistory(Request $request){
+    public function getUserUsageInfo(Request $request){
+        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
 
+        $data = [
+            'fromdate' => $request->fromdate,
+            'todate' => $request->todate,
+        ];
+        try {
+            // Make the API request using Laravel's HTTP client and add the username and password in the header
+            $response = Http::withHeaders([
+                'username' => $request->username,
+                'password' => $request->password,
+            ])->post($url, $data);
+            $responseData = $response->json();
+            // Check if the request was successful
+            if ($responseData["responsecode"] == 1) {
+                $success["totalEffectiveSessionTime"] = $responseData["responsemsg"]["totalEffectiveSessionTime"];
+                $success["upload"] = $responseData["responsemsg"]["result"];
+                return json_encode($responseData["responsemsg"]["result"]);
+                // $success["download"] = $responseData["responsemsg"]["result"]["download"];
+                // $success["totaltransfer"] = $responseData["responsemsg"]["result"]["totaltransfer"];
+                return $this->returnSuccess($responseData["responsemsg"]["result"], 'Retrieved successfully.', 200);
+            } else {
+                return $this->returnError('Error', $responseData["responsemsg"]);
+            }
+        } catch (\Exception $e) {
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
     }
 }
