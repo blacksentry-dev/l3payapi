@@ -80,7 +80,7 @@ class OnlineRenewSubscription extends BaseController
             $responseData = $response->json();
             if ($responseData["responsecode"] == 1) {
                 $success['password'] =  $responseData["responsemsg"];
-                return $this->returnSuccess($success, 'User renewed successfully.', 200);
+                return $this->returnSuccess($success, 'User Password retrieved successfully.', 200);
             } else {
                 return $this->returnError('Error', $responseData["responsemsg"]);
             }
