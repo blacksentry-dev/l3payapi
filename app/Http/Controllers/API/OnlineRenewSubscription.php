@@ -54,17 +54,79 @@ class OnlineRenewSubscription extends BaseController
             // Make the API request using Laravel's HTTP client
             $response = Http::post($url, $data);
 
-            // Check if the request was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
+            $responseData = $response->json();
+            if ($responseData["responsecode"] == 1) {
                 $success['message'] =  $responseData["responsemsg"];
                 return $this->returnSuccess($success, 'User renewed successfully.', 200);
             } else {
-                // If the request was not successful, handle the error
-                return $this->returnError('Error', $response->status());
+                return $this->returnError('Error', $responseData["responsemsg"]);
             }
         } catch (\Exception $e) {
             return $this->returnError('Error', $e->getMessage(), 500);            
         }
+    }
+
+    public function getUserPassword(Request $request){
+        $url = 'http://102.164.36.86:10080/24online/service/UserService/getUserPassword';
+
+        // Set the API request parameters as a JSON object
+        $data = [
+            'username' => $request->username,
+        ];
+
+        try {
+            // Make the API request using Laravel's HTTP client
+            $response = Http::post($url, $data);
+            $responseData = $response->json();
+            if ($responseData["responsecode"] == 1) {
+                $success['password'] =  $responseData["responsemsg"];
+                return $this->returnSuccess($success, 'User renewed successfully.', 200);
+            } else {
+                return $this->returnError('Error', $responseData["responsemsg"]);
+            }
+        } catch (\Exception $e) {
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function userStatus(Request $request){
+        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/userInfo';
+
+        try {
+            // Make the API request using Laravel's HTTP client and add the username and password in the header
+            $response = Http::withHeaders([
+                'username' => $request->username,
+                'password' => $request->password,
+            ])->post($url);
+            $responseData = $response->json();
+            // Check if the request was successful
+            if ($responseData["responsecode"] == 1) {
+                $success["planName"] = $responseData["responsemsg"]["planName"];
+                $success["phone"] = $responseData["responsemsg"]["phone"];
+                $success["userid"] = $responseData["responsemsg"]["userid"];
+                $success["createdate"] = $responseData["responsemsg"]["createdate"];
+                $success["dateofbirth"] = $responseData["responsemsg"]["dateofbirth"];
+                $success["usertype"] = $responseData["responsemsg"]["usertype"];
+                $success["ipaddress"] = $responseData["responsemsg"]["ipaddress"];
+                $success["expirydate"] = $responseData["responsemsg"]["expirydate"];
+                $success["emailid"] = $responseData["responsemsg"]["emailid"];
+                $success["planPrice"] = $responseData["responsemsg"]["planPrice"];
+                $success["nextbilldate"] = $responseData["responsemsg"]["nextbilldate"];
+                $success["username"] = $responseData["responsemsg"]["username"];
+                $success["accountno"] = $responseData["responsemsg"]["accountno"];
+                $success["name"] = $responseData["responsemsg"]["name"];
+                $success["lastrenewaldate"] = $responseData["responsemsg"]["lastrenewaldate"];
+                $success["renewalPrice"] = $responseData["responsemsg"]["renewalPrice"];
+                return $this->returnSuccess($success, 'Retrieved successfully.', 200);
+            } else {
+                return $this->returnError('Error', $responseData["responsemsg"]);
+            }
+        } catch (\Exception $e) {
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function RenewalHistory(Request $request){
+
     }
 }
