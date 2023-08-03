@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\API\OnlineRenewSubscription;
 use App\Http\Controllers\API\TransactionController;
 
 /*
@@ -43,7 +44,10 @@ Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'ge
 Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
 Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
 Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
-     
+
+Route::get('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
+
+
 Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
     Route::post('/users/send-registration-email', [RegisterController::class, 'sendRegistrationOTP']);
