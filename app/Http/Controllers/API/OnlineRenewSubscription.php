@@ -127,27 +127,50 @@ class OnlineRenewSubscription extends BaseController
     }
 
     public function getUserUsageInfo(Request $request){
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
+        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/usageInfo';
 
-        $data = [
-            'fromdate' => $request->fromdate,
-            'todate' => $request->todate,
-        ];
+
         try {
             // Make the API request using Laravel's HTTP client and add the username and password in the header
             $response = Http::withHeaders([
                 'username' => $request->username,
                 'password' => $request->password,
-            ])->post($url, $data);
+            ])->post($url);
+
             $responseData = $response->json();
-            // Check if the request was successful
             if ($responseData["responsecode"] == 1) {
-                $success["totalEffectiveSessionTime"] = $responseData["responsemsg"]["totalEffectiveSessionTime"];
-                $success["upload"] = $responseData["responsemsg"]["result"];
-                return json_decode($responseData["responsemsg"]["result"]);
-                // $success["download"] = $responseData["responsemsg"]["result"]["download"];
-                // $success["totaltransfer"] = $responseData["responsemsg"]["result"]["totaltransfer"];
-                return $this->returnSuccess($responseData["responsemsg"]["result"], 'Retrieved successfully.', 200);
+                $success["uploadused"] = $responseData["responsemsg"]["uploadused"];
+                $success["downloadused"] = $responseData["responsemsg"]["downloadused"];
+                $success["totalused"] = $responseData["responsemsg"]["totalused"];
+                $success["usedminutesaccountwise"] = $responseData["responsemsg"]["usedminutesaccountwise"];
+                return $this->returnSuccess($success, 'Retrieved successfully.', 200);
+            } else {
+                return $this->returnError('Error', $responseData["responsemsg"]);
+            }
+        } catch (\Exception $e) {
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
+    }
+
+    public function getPaymentStatus(Request $request){
+        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/getPaymentStatus';
+
+        // Set the API request parameters as a JSON object
+        $data = [
+            'status' => true,
+        ];
+
+        try {
+            $response = Http::withHeaders([
+                'username' => $request->username,
+                'password' => $request->password,
+            ])->post($url, $data);
+
+            $responseData = $response->json();
+            //return $responseData;
+            if ($responseData["responsecode"] == 1) {
+                $success['paymentHistory'] =  $responseData["responsemsg"]["actionHistoryList"];
+                return $this->returnSuccess($success, 'User Password retrieved successfully.', 200);
             } else {
                 return $this->returnError('Error', $responseData["responsemsg"]);
             }
