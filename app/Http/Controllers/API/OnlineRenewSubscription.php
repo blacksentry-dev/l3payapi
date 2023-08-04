@@ -460,10 +460,11 @@ class OnlineRenewSubscription extends BaseController
                 'password' => $request->password,
             ])->post($url, $data);
             $responseData = $response->json();
+
             // Check if the request was successful
-            if ($responseData["responsecode"] == 1) {
+            if ($responseData["responsecode"] == 1) {      
                 $success['sessionUsageDetails'] = json_decode($responseData["responsemsg"]["result"]);
-                return $this->returnSuccess($success, 'User Password retrieved successfully.', 200);
+                return $this->returnSuccess($success, 'User Session Details retrieved successfully.', 200);
             } else {
                 return $this->returnError('Error', $responseData["responsemsg"]);
             }
