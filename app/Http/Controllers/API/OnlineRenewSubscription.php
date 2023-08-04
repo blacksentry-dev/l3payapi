@@ -13,8 +13,8 @@ class OnlineRenewSubscription extends BaseController
      * @OA\Post(
      * path="/api/24online/renew-package",
      * operationId="User Renew Subscription",
-     * tags={"Subscription"},
-     * summary="User Renew Subscriptionr",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="User Renew Subscription",
      * description="User Renew Subscription here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(),
@@ -66,6 +66,35 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/user-password",
+     * operationId="Get User Password",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Password",
+     * description="Get User Password here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function getUserPassword(Request $request){
         $url = 'http://102.164.36.86:10080/24online/service/UserService/getUserPassword';
 
@@ -89,6 +118,35 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/user-status",
+     * operationId="Get User Status",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Status",
+     * description="Get User Status here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function userStatus(Request $request){
         $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/userInfo';
 
@@ -126,6 +184,35 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/user-usage-info",
+     * operationId="Get User Usage Information",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Usage Information",
+     * description="Get User Usage Information here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function getUserUsageInfo(Request $request){
         $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/usageInfo';
 
@@ -152,6 +239,35 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/payment-status",
+     * operationId="Get User Payment Status",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Payment Status",
+     * description="Get User Payment Status here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function getPaymentStatus(Request $request){
         $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/getPaymentStatus';
 
@@ -179,6 +295,42 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/renewal-history",
+     * operationId="Get User Renewal History",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Renewal History",
+     * description="Get User Renewal History here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *              @OA\Property(property="month", type="string", description="Month to start"),
+     *              @OA\Property(property="year", type="string", description="Year"),
+     *              @OA\Property(property="beginindex", type="integer", description="The beginning index"),
+     *              @OA\Property(property="count", type="integer", description="The number of items to retrieve"),
+     *      ),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function RenewalHistory(Request $request)
     {
         $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/renewalHistory';
@@ -220,6 +372,40 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/invoice-detail",
+     * operationId="Get User Invoice Details",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Invoice Details",
+     * description="Get User Invoice Details here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *              @OA\Property(property="beginindex", type="integer", description="The beginning index"),
+     *              @OA\Property(property="count", type="integer", description="The number of items to retrieve"),
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function getInvoiceDetail(Request $request)
     {
         $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/invoiceDetail';

@@ -149,15 +149,357 @@
         "/api/24online/renew-package": {
             "post": {
                 "tags": [
-                    "Subscription"
+                    "24Online (FTTH Subscription)"
                 ],
-                "summary": "User Renew Subscriptionr",
+                "summary": "User Renew Subscription",
                 "description": "User Renew Subscription here",
                 "operationId": "User Renew Subscription",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/user-password": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Password",
+                "description": "Get User Password here",
+                "operationId": "Get User Password",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/user-status": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Status",
+                "description": "Get User Status here",
+                "operationId": "Get User Status",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/user-usage-info": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Usage Information",
+                "description": "Get User Usage Information here",
+                "operationId": "Get User Usage Information",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/payment-status": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Payment Status",
+                "description": "Get User Payment Status here",
+                "operationId": "Get User Payment Status",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/renewal-history": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Renewal History",
+                "description": "Get User Renewal History here",
+                "operationId": "Get User Renewal History",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    },
+                                    "month": {
+                                        "description": "Month to start",
+                                        "type": "string"
+                                    },
+                                    "year": {
+                                        "description": "Year",
+                                        "type": "string"
+                                    },
+                                    "beginindex": {
+                                        "description": "The beginning index",
+                                        "type": "integer"
+                                    },
+                                    "count": {
+                                        "description": "The number of items to retrieve",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/24online/invoice-detail": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Invoice Details",
+                "description": "Get User Invoice Details here",
+                "operationId": "Get User Invoice Details",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    },
+                                    "beginindex": {
+                                        "description": "The beginning index",
+                                        "type": "integer"
+                                    },
+                                    "count": {
+                                        "description": "The number of items to retrieve",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
