@@ -36,10 +36,11 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"first_name","last_name","email", "password", "password_confirmation"},
+     *               required={"first_name","last_name","email", "username", "password", "password_confirmation"},
      *               @OA\Property(property="first_name", type="text"),
      *               @OA\Property(property="last_name", type="text"),
      *               @OA\Property(property="email", type="text"),
+     *               @OA\Property(property="username", type="text"),
      *               @OA\Property(property="password", type="password"),
      *               @OA\Property(property="password_confirmation", type="password")
      *            ),
@@ -80,6 +81,10 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Email already taken');
             }
 
+            if ($request->has('username') && empty($request->input('username'))) {
+                return $this->returnError('Validation Error', 'Username field can not be empty');
+            }
+
             // if ($this->isUsernameExistsInDatabase($request->input('username'))) {
             //     return $this->returnError('Validation Error', 'Username already in use');
             // }
@@ -104,6 +109,7 @@ class RegisterController extends BaseController
             $email = $user->email;
             $firstName = $user->first_name;
             $lastName = $user->last_name;
+            $userName = $user->username;
 
             $otp = $this->generateOTP();
             Otp::create([
@@ -160,8 +166,8 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"email", "password"},
-     *               @OA\Property(property="email", type="text"),
+     *               required={"username", "password"},
+     *               @OA\Property(property="username", type="text"),
      *               @OA\Property(property="password", type="password")
      *            ),
      *        ),
@@ -187,7 +193,7 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
+        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
             if(!empty($user->email_verified_at)){
                 $success['token'] =  $user->createToken('MyApp')->accessToken;

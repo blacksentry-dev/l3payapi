@@ -553,6 +553,7 @@
                                     "first_name",
                                     "last_name",
                                     "email",
+                                    "username",
                                     "password",
                                     "password_confirmation"
                                 ],
@@ -564,6 +565,9 @@
                                         "type": "text"
                                     },
                                     "email": {
+                                        "type": "text"
+                                    },
+                                    "username": {
                                         "type": "text"
                                     },
                                     "password": {
@@ -628,11 +632,11 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "email",
+                                    "username",
                                     "password"
                                 ],
                                 "properties": {
-                                    "email": {
+                                    "username": {
                                         "type": "text"
                                     },
                                     "password": {
