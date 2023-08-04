@@ -430,7 +430,7 @@ class OnlineRenewSubscription extends BaseController
                         "fullCustomerName" => $responseItem["fullCustomerName"],
                         "invoiceNo" => $responseItem["invoiceNo"],
                         "address1" => $responseItem["address1"],
-                        "expiryDate" => $responseItem["expiryDate"],
+                        "invoiceDate" => $responseItem["expiryDate"],
                         "basicInvoiceAmount" => $responseItem["basicInvoiceAmount"],
                         "grandTotal" => $responseItem["grandTotal"],
                     ];
