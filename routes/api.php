@@ -75,6 +75,7 @@ Route::post('24online/renewal-history', [OnlineRenewSubscription::class, 'Renewa
 Route::post('24online/user-password', [OnlineRenewSubscription::class, 'getUserPassword']);
 Route::post('24online/user-usage-info', [OnlineRenewSubscription::class, 'getUserUsageInfo']);
 Route::post('24online/payment-status', [OnlineRenewSubscription::class, 'getPaymentStatus']);
+Route::post('24online/invoice-detail', [OnlineRenewSubscription::class, 'getInvoiceDetail']);
 
 
 Route::middleware('auth:api')->group( function () {
