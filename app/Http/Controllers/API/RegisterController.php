@@ -772,6 +772,9 @@ class RegisterController extends BaseController
     {
         try {
             $user = User::find($request->user_id);
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
     
             if (!$user) {
                 return $this->returnError('User not found.', 404);
@@ -791,6 +794,8 @@ class RegisterController extends BaseController
     
             $user->password = bcrypt($request->input('new_password'));
             $user->save();
+
+            $this->PasswordResetSuccessMail($email, $firstName, $lastName);
     
             return $this->returnSuccess('Password changed successfully.', 200);
         } catch (\Throwable $th) {
