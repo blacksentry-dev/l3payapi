@@ -33,6 +33,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/users/verify-password-otp/{user_id}', [RegisterController::class, 'verifyResetPasswordOtp']);
     Route::post('/users/reset-password/{user_id}', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
+    Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
 
     //Feedback and Rating
     Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);

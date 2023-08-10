@@ -6,6 +6,7 @@ use Validator;
 use App\Models\Otp;
 use App\Models\User;
 use App\ValidationRules;
+use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -14,11 +15,11 @@ use Illuminate\Http\JsonResponse;
 use App\Models\PasswordResetToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\Transaction;
-use Illuminate\Support\Facades\Http;
 
 class RegisterController extends BaseController
 {
@@ -555,8 +556,63 @@ class RegisterController extends BaseController
                 return $this->returnError('Error', $th->getMessage(), 500);
             }     
     }
-    
 
+    /**
+     * @OA\Post(
+     *     path="/api/users/verify-reset-password-otp",
+     *     operationId="verifyResetPasswordOtp",
+     *     tags={"Verify Reset Password OTP"},
+     *     summary="Verify reset password OTP",
+     *     description="Verify the reset password OTP entered by the user.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "otp"},
+     *             @OA\Property(property="user_id", type="integer"),
+     *             @OA\Property(property="otp", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success: OTP verified successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Reset password OTP verified successful.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Validation Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Validation Error.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Invalid OTP.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Invalid OTP.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=410,
+     *         description="OTP has expired.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="OTP has expired.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal Server Error.")
+     *         )
+     *     ),
+     * )
+     */
     public function verifyResetPasswordOtp(Request $request): JsonResponse
     {
         try {
@@ -582,6 +638,60 @@ class RegisterController extends BaseController
         }       
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/users/reset-password/{user_id}",
+     *     operationId="resetPassword",
+     *     tags={"Reset Password"},
+     *     summary="Reset user's password",
+     *     description="Reset the user's password with a new password.",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         required=true,
+     *         description="User ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"password"},
+     *             @OA\Property(property="password", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success: Password reset successful.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Password reset successful.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Validation Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Validation Error.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="User not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal Server Error.")
+     *         )
+     *     ),
+     * )
+     */
     public function resetPassword(Request $request, $user_id): JsonResponse
     {
         try {
@@ -607,4 +717,6 @@ class RegisterController extends BaseController
             return $this->returnError('Error', $th->getMessage(), 500);
         }
     }
+
+    
 }
