@@ -561,7 +561,7 @@ class RegisterController extends BaseController
      * @OA\Post(
      *     path="/api/users/verify-reset-password-otp",
      *     operationId="verifyResetPasswordOtp",
-     *     tags={"Verify Reset Password OTP"},
+     *     tags={"Forgot Password"},
      *     summary="Verify reset password OTP",
      *     description="Verify the reset password OTP entered by the user.",
      *     @OA\RequestBody(
@@ -642,7 +642,7 @@ class RegisterController extends BaseController
      * @OA\Post(
      *     path="/api/users/reset-password/{user_id}",
      *     operationId="resetPassword",
-     *     tags={"Reset Password"},
+     *     tags={"Forgot Password"},
      *     summary="Reset user's password",
      *     description="Reset the user's password with a new password.",
      *     @OA\Parameter(
@@ -718,5 +718,83 @@ class RegisterController extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/users/change-password/{user_id}",
+     *     operationId="changePassword",
+     *     tags={"Change Password"},
+     *     summary="Change user's password",
+     *     description="Change the user's password with recent password and new password.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             required={"user_id", "recent_password", "new_password", "confirm_new_password"},
+     *             @OA\Property(property="user_id", type="integer"),
+     *             @OA\Property(property="recent_password", type="string"),
+     *             @OA\Property(property="new_password", type="string"),
+     *             @OA\Property(property="confirm_new_password", type="string"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success: Password changed successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="Password changed successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Validation Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Validation Error.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="User not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Internal Server Error.")
+     *         )
+     *     ),
+     * )
+     */
+    public function changePassword(Request $request, $user_id): JsonResponse
+    {
+        try {
+            $user = User::find($request->user_id);
     
+            if (!$user) {
+                return $this->returnError('User not found.', 404);
+            }
+    
+            if (!Hash::check($request->input('recent_password'), $user->password)) {
+                return $this->returnError('Validation Error', 'Recent password is incorrect.', 401);
+            }
+    
+            if (empty($request->input('new_password')) || empty($request->input('confirm_new_password'))) {
+                return $this->returnError('Validation Error', 'New password and confirm new password fields cannot be empty.', 401);
+            }
+    
+            if ($request->input('new_password') !== $request->input('confirm_new_password')) {
+                return $this->returnError('Validation Error', 'New password and confirm new password do not match.', 401);
+            }
+    
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
+    
+            return $this->returnSuccess('Password changed successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }
+    }
 }
