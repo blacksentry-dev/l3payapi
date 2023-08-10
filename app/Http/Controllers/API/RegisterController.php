@@ -396,6 +396,17 @@ class RegisterController extends BaseController
      *     tags={"Email Verification"},
      *     summary="Resend OTP to the user's email",
      *     description="Resend OTP to the user's email if they have not been verified or if the previous OTP has expired.",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"user_id"},
+     *               @OA\Property(property="user_id", type="integer"),
+     *            ),
+     *        ),
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="OTP resent successfully",
@@ -509,19 +520,43 @@ class RegisterController extends BaseController
 
             $otp = $this->generateOTP();
 
-            DB::table('password_reset_tokens')->updateOrInsert(
-                ['email' => $user->email],
-                ['otp' => $otp, 'created_at' => now()]
-            );
+            // Calculate expiration time (15 minutes from now)
+            $expiration = Carbon::now()->addMinutes(15);
 
-            $this->sendPasswordResetEmail($email, $firstName, $lastName, $otp);
+            // Check if there's an existing token for the user
+        $existingToken = DB::table('password_reset_tokens')
+        ->where('user_id', $user->id)
+        ->first();
 
-            return $this->returnSuccess($otp, 'Reset passwaord Otp sent successfully.', 200);
-        } catch (\Throwable $th) {
-            return $this->returnError('Error', $th->getMessage(), 500);
-        }     
+        if ($existingToken) {
+            // Update existing token
+            DB::table('password_reset_tokens')
+                ->where('user_id', $user->id)
+                ->update([
+                    'otp' => $otp,
+                    'expiration' => $expiration,
+                ]);
+        } else {
+            // Create new token
+            DB::table('password_reset_tokens')->insert([
+                'user_id' => $user->id,
+                'email' => $email,
+                'otp' => $otp,
+                'expiration' => $expiration,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+                $this->sendPasswordResetEmail($email, $firstName, $lastName, $otp);
+
+                return $this->returnSuccess($otp, 'Reset passwaord Otp sent successfully.', 200);
+            } catch (\Throwable $th) {
+                return $this->returnError('Error', $th->getMessage(), 500);
+            }     
     }
     
+
     public function verifyResetPasswordOtp(Request $request): JsonResponse
     {
         try {
@@ -541,39 +576,35 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'OTP has expired', 410);
             }
 
-            return $this->returnSuccess('Reset password OTP verification successful.', 200);
+            return $this->returnSuccess('Reset password OTP verified successful.', 200);
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         }       
     }
 
-    public function test24online(): JsonResponse
+    public function resetPassword(Request $request, $user_id): JsonResponse
     {
-        $url = 'http://selfserviceportal.layer3.ng:10080/24online/service/UserService/renewUser';
-
-        // Set the API request parameters as a JSON object
-        $data = [
-            'username' => 'john_layer3',
-            'invstatus' => '',
-            'authUsername' => 'administrator',
-            'sourceIPAddress' => '',
-        ];
-
         try {
-            // Make the API request using Laravel's HTTP client
-            $response = Http::post($url, $data);
+            $user = User::where('id', $request->user_id)->first();
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
 
-            // Check if the request was successful
-            if ($response->successful()) {
-                $responseData = $response->json(); // Get the response data as an array
-                return response()->json($responseData);
-            } else {
-                // If the request was not successful, handle the error
-                return response()->json(['error' => 'API request failed'], $response->status());
+            if (!$user) {
+                return $this->returnError('User not found.', [], 404);
             }
-        } catch (\Exception $e) {
-            // Handle any exceptions that occurred during the API request
-            return response()->json(['error' => $e->getMessage()], 500);
+
+            // Update password
+            // $input['password'] = bcrypt($input['password']);
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+
+            // Send password reset success email
+            $this->PasswordResetSuccessMail($email, $firstName, $lastName);
+
+            return $this->returnSuccess('Password reset successful.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
         }
     }
 }

@@ -803,6 +803,26 @@
                 "summary": "Resend OTP to the user's email",
                 "description": "Resend OTP to the user's email if they have not been verified or if the previous OTP has expired.",
                 "operationId": "resendOtp",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "OTP resent successfully",

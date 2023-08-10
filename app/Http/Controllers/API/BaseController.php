@@ -96,4 +96,15 @@ class BaseController extends Controller
                 ->subject('Password Reset OTP');
         });
     }
+
+    protected function PasswordResetSuccessMail(string $email, string $firstName, string $lastName): void
+    {
+        $message = "Hello $firstName $lastName,\n\n";
+        $message .= "You have successfully reset your password\n";
+
+        Mail::raw($message, function ($emailMessage) use ($email) {
+            $emailMessage->to($email)
+                ->subject('Password Reset Successfully');
+        });
+    }
 }
