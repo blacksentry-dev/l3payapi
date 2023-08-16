@@ -70,7 +70,7 @@ class ReminderController extends BaseController
         //
     }
 
-    public function schedulePayment(Request $request): JsonResponse
+    public function schedulePaymentReminder(Request $request): JsonResponse
     {
         try {
             if ($request->has('payment_due_date') && empty($request->input('payment_due_date'))) {
@@ -115,6 +115,22 @@ class ReminderController extends BaseController
         }
     }
 
-    
+    public function cancelPaymentReminder(Request $request): JsonResponse
+    {
+        try {
+            $reminder = Reminder::find($request->reminder_id);
+            // $user = User::where('id', $request->user_id)->first();
+
+            if (!$reminder) {
+                return $this->returnError('Reminder not found.', [], 404);
+            }
+
+            $reminder->delete();
+
+            return $this->returnSuccess('Payment reminder cancelled.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }
+    }
 
 }
