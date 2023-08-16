@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\OnlineRenewSubscription;
+use App\Http\Controllers\API\ReminderController;
 use App\Http\Controllers\API\TransactionController;
 
 /*
@@ -52,6 +53,10 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
     Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
     Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
+    //Reminder
+    Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
+    Route::get('/reminder/user-reminder', [ReminderController::class, 'getPaymentReminders']);
+    Route::post('/reminder/cancel', [ReminderController::class, 'cancelPaymentReminder']);
 });
 
 
@@ -85,3 +90,7 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('products', ProductController::class);
     Route::post('/users/send-registration-email', [RegisterController::class, 'sendRegistrationOTP']);
 });
+
+Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
+Route::get('/reminder/user-reminder', [ReminderController::class, 'getPaymentReminders']);
+Route::post('/reminder/cancel', [ReminderController::class, 'cancelPaymentReminder']);
