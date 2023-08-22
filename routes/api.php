@@ -3,13 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\TicketController;
 use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\OnlineRenewSubscription;
 use App\Http\Controllers\API\ReminderController;
 use App\Http\Controllers\API\TransactionController;
+use App\Http\Controllers\API\OnlineRenewSubscription;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
     Route::get('/reminder/user-reminder', [ReminderController::class, 'getPaymentReminders']);
     Route::post('/reminder/cancel', [ReminderController::class, 'cancelPaymentReminder']);
+    //Tickets
+    Route::post('/tickets/create', [TicketController::class, 'createTicket']);
 });
 
 
