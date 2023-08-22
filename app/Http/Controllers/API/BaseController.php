@@ -110,13 +110,13 @@ class BaseController extends Controller
 
     protected function SupportTicketMail(string $email, string $firstName, string $lastName, string $address, string $issue, string $description): void
     {
-        $message = "Hello Support, our FTTH customer\n\n";
-        $message .= "$firstName $lastName at $address has raised an issue on $issue\n";
-        $message .= "Description: $description,\n";
+        $message = "Hello Support, our FTTH customer,\n\n";
+        $message .= "$firstName $lastName at $address has raised an issue on $issue.\n";
+        $message .= "Description: $description\n\n";
         $message .= "Please address issues accordingly.\n";
 
         Mail::raw($message, function ($emailMessage) use ($email, $firstName, $lastName) {
-            $emailMessage->to('support@layer3.com.ng') // Support team's email address
+            $emailMessage->to('wisgeorge.wg@gmail.com') // Support team's email address
                 ->from($email, "$firstName $lastName")
                 ->subject('New FTTH Ticket');
         });
