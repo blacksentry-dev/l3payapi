@@ -210,47 +210,41 @@ class WalletController extends BaseController
 
     public function makeWalletPayment(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'payment_amount' => 'required|numeric|min:0',
-            'bill_id' => 'required|string',
-        ]);
+        try {
+                $validator = Validator::make($request->all(), [
+                    'user_id' => 'required|exists:users,id',
+                    'amount' => 'required|numeric|min:0',
+                ]);
+            
+                if ($validator->fails()) {
+                    return $this->sendError('Validation Error.', $validator->errors());
+                }
+            
+                // Get user from user_id
+                $user = User::find($request->input('user_id'));
+            
+                if (!$user) {
+                    return $this->sendError('User not found.', [], 404);
+                }
+            
+                $amount = $request->input('amount');
+            
+                // Check if user's wallet balance is sufficient
+                $wallet = $user->wallet;
+            
+                if ($wallet->amount < $amount) {
+                    return $this->sendError('Insufficient Wallet Balance.');
+                }
+            
+                // Deduct the payment amount from the wallet
+                $wallet->amount -= $amount;
+                $wallet->save();
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-
-        $user = User::find($request->input('user_id'));
-        $bill = Bill::find($request->input('bill_id'));
-
-        if (!$user) {
-            return $this->sendError('User not found.', [], 404);
-        }
-
-        $paymentAmount = $request->input('payment_amount');
-        // $billId = $request->input('bill_id');
-        $billDescription = $bill->description;
-
-        // Check if the user's wallet balance is sufficient to cover the payment
-        if ($user->wallet->amount < $paymentAmount) {
-            return $this->sendError('Insufficient wallet balance.', [], 400);
-        }
-
-        // Perform the necessary actions to process the wallet payment
-        // For this example, we'll just deduct the payment amount from the user's wallet balance
-
-        $user->wallet->amount -= $paymentAmount;
-        $user->wallet->save();
-
-
-        //Create a new wallet payment transaction record
-        Transaction::create([
-            'user_id' => $user->id,
-            'type' => 'wallet',
-            'description' => "Payment for {$billDescription} bill",
-            'amount' => $paymentAmount,
-        ]);
-
+                return $this->returnSuccess($wallet, 'Wallet created successfully.', 200);
+            } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        } 
+    
         return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
     }
 
