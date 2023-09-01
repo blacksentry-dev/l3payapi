@@ -208,18 +208,13 @@ class WalletController extends BaseController
      * )
      */
 
-    public function makeWalletPayment(Request $request): JsonResponse
+    public function makeWalletPayment(Request $request, $user_id): JsonResponse
     {
         try {
-                $validator = Validator::make($request->all(), [
-                    'user_id' => 'required|exists:users,id',
-                    'amount' => 'required|numeric|min:0',
-                ]);
-            
-                if ($validator->fails()) {
-                    return $this->sendError('Validation Error.', $validator->errors());
+                if ($request->has('amount') && empty($request->input('amount'))) {
+                    return $this->returnError('Validation Error', 'amount field can not be empty');
                 }
-            
+                
                 // Get user from user_id
                 $user = User::find($request->input('user_id'));
             
@@ -240,12 +235,12 @@ class WalletController extends BaseController
                 $wallet->amount -= $amount;
                 $wallet->save();
 
-                return $this->returnSuccess($wallet, 'Wallet created successfully.', 200);
+                return $this->returnSuccess($wallet, 'Wallet payment successfully.', 200);
             } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         } 
     
-        return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
+        // return $this->sendResponse(['status' => 'success'], 'Payment Successful!');
     }
 
     /**
