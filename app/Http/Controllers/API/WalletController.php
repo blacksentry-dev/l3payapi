@@ -208,7 +208,7 @@ class WalletController extends BaseController
      * )
      */
 
-    public function makeWalletPayment(Request $request, $user_id): JsonResponse
+    public function makeWalletPayment(Request $request): JsonResponse
     {
         try {
                 if ($request->has('amount') && empty($request->input('amount'))) {
