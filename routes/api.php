@@ -47,7 +47,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/wallet/balance/{user_id}',
         [WalletController::class, 'getWalletBalance']
     );
-    Route::post('/wallet/payment', [WalletController::class, 'makeWalletPayment']);
+    Route::post('/wallet/payment/{user_id}', [WalletController::class, 'makeWalletPayment']);
     // Transaction
     Route::post('/user/transaction', [TransactionController::class, 'createTransaction']);
     Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'getUserTransaction']);
@@ -71,7 +71,7 @@ Route::get('/rating/average', [FeedbackController::class, 'getAverageFeedback'])
 Route::post('/wallet/create', [WalletController::class, 'createUsersWallet']);
 Route::post('/wallet/fund', [WalletController::class, 'fundWallet']);
 Route::get('/wallet/balance/{user_id}', [WalletController::class, 'getWalletBalance']);
-Route::post('/wallet/payment', [WalletController::class, 'makeWalletPayment']);
+Route::post('/wallet/payment/{user_id}', [WalletController::class, 'makeWalletPayment']);
 // Transaction
 Route::post('/user/transaction', [TransactionController::class, 'createTransaction']);
 Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'getUserTransaction']);
