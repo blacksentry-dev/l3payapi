@@ -951,7 +951,7 @@
         "/api/users/verify-reset-password-otp": {
             "post": {
                 "tags": [
-                    "Verify Reset Password OTP"
+                    "Forgot Password"
                 ],
                 "summary": "Verify reset password OTP",
                 "description": "Verify the reset password OTP entered by the user.",
@@ -1084,7 +1084,7 @@
         "/api/users/reset-password/{user_id}": {
             "post": {
                 "tags": [
-                    "Reset Password"
+                    "Forgot Password"
                 ],
                 "summary": "Reset user's password",
                 "description": "Reset the user's password with a new password.",
@@ -1604,6 +1604,106 @@
                     },
                     "404": {
                         "description": "Transaction not found"
+                    }
+                }
+            }
+        },
+        "/api/transaction-pin/create": {
+            "post": {
+                "tags": [
+                    "Transaction Pin"
+                ],
+                "summary": "Set a user's transaction PIN.",
+                "description": "Set a user's transaction PIN.",
+                "operationId": "setTransactionPin",
+                "requestBody": {
+                    "description": "JSON request body for setting transaction PIN",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "transaction_pin"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "transaction_pin": {
+                                        "type": "integer",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transaction PIN set successfully."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
+                    }
+                }
+            }
+        },
+        "/api/transaction-pin/update": {
+            "post": {
+                "tags": [
+                    "Transaction Pin"
+                ],
+                "summary": "Update a user's transaction PIN.",
+                "description": "Update a user's transaction PIN.",
+                "operationId": "updateTransactionPin",
+                "requestBody": {
+                    "description": "JSON request body for updating transaction PIN",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "old_pin",
+                                    "new_pin"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "old_pin": {
+                                        "type": "integer",
+                                        "example": 1234
+                                    },
+                                    "new_pin": {
+                                        "type": "integer",
+                                        "example": 5678
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transaction PIN updated successfully."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "422": {
+                        "description": "Invalid old PIN."
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
                     }
                 }
             }

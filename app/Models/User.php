@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'username',
         'address',
+        'transaction_pin',
     ];
 
     /**

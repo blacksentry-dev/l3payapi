@@ -54,6 +54,9 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
     Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
     Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
+    Route::post('/user/transaction-pin/create', [TransactionController::class, 'setTransactionPin']);
+    Route::post('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
+
     //Reminder
     Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
     Route::get('/reminder/user-reminder', [ReminderController::class, 'getPaymentReminders']);
@@ -78,6 +81,8 @@ Route::get('/user/get-transaction/{user_id}', [TransactionController::class, 'ge
 Route::get('/user/total-transaction/{user_id}', [TransactionController::class, 'getUserTotalTransaction']);
 Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
 Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
+Route::post('/user/transaction-pin/create', [TransactionController::class, 'setTransactionPin']);
+Route::post('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
 
 Route::post('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
 Route::post('24online/user-status', [OnlineRenewSubscription::class, 'UserStatus']);
