@@ -94,7 +94,7 @@ class RegisterController extends BaseController
             //     return $this->returnError('Validation Error', 'Phone Number already in use');
             // }
 
-            if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('new_password'))) {
+            if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('password'))) {
                 return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
             }
 
