@@ -95,7 +95,7 @@ class RegisterController extends BaseController
             // }
 
             if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('new_password'))) {
-                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 401);
+                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
             }
 
             $input = $request->all();
@@ -796,7 +796,7 @@ class RegisterController extends BaseController
 
             // Add password strength validation here
             if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('new_password'))) {
-                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 401);
+                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
             }
     
             $user->password = bcrypt($request->input('new_password'));
