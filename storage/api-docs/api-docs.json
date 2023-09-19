@@ -869,7 +869,7 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "user_id"
+                                    "username"
                                 ],
                                 "properties": {
                                     "username": {
@@ -1081,7 +1081,7 @@
                 }
             }
         },
-        "/api/users/reset-password/{user_id}": {
+        "/api/users/reset-password": {
             "post": {
                 "tags": [
                     "Forgot Password"
