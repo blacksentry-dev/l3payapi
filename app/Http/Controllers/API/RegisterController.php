@@ -618,7 +618,7 @@ class RegisterController extends BaseController
     public function verifyResetPasswordOtp(Request $request): JsonResponse
     {
         try {
-            $user = User::where('id', $request->user_id)->first();
+            $user = User::where('username', $request->username)->first();
 
             if ($request->has('otp') && empty($request->input('otp'))) {
                 return $this->returnError('Validation Error', 'Otp field can not be empty', 401);
