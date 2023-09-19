@@ -634,7 +634,12 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'OTP has expired', 410);
             }
 
-            return $this->returnSuccess('Reset password OTP verified successful.', 200);
+            $resetUser = User::find($otpModel->user_id);
+
+            return $this->returnSuccess([
+                'message' => 'Reset password OTP verified successfully.',
+                'user' => $resetUser,
+            ], 200);
         } catch (\Throwable $th) {
             return $this->returnError('Error', $th->getMessage(), 500);
         }       
