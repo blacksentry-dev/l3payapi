@@ -478,8 +478,8 @@ class RegisterController extends BaseController
      *            mediaType="multipart/form-data",
      *            @OA\Schema(
      *               type="object",
-     *               required={"user_id"},
-     *               @OA\Property(property="user_id", type="integer"),
+     *               required={"username"},
+     *               @OA\Property(property="username", type="string"),
      *            ),
      *        ),
      *     ),
@@ -512,7 +512,7 @@ class RegisterController extends BaseController
     public function forgotPassword(Request $request): JsonResponse
     {
         try {
-            $user = User::where('id', $request->user_id)->first();
+            $user = User::where('username', $request->username)->first();
             $email = $user->email;
             $firstName = $user->first_name;
             $lastName = $user->last_name;

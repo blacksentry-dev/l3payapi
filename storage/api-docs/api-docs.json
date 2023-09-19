@@ -872,8 +872,8 @@
                                     "user_id"
                                 ],
                                 "properties": {
-                                    "user_id": {
-                                        "type": "integer"
+                                    "username": {
+                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
