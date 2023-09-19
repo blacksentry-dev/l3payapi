@@ -647,7 +647,7 @@ class RegisterController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/api/users/reset-password/{user_id}",
+     *     path="/api/users/reset-password",
      *     operationId="resetPassword",
      *     tags={"Forgot Password"},
      *     summary="Reset user's password",
@@ -699,10 +699,10 @@ class RegisterController extends BaseController
      *     ),
      * )
      */
-    public function resetPassword(Request $request, $user_id): JsonResponse
+    public function resetPassword(Request $request): JsonResponse
     {
         try {
-            $user = User::where('id', $request->user_id)->first();
+            $user = User::where('username', $request->username)->first();
             $email = $user->email;
             $firstName = $user->first_name;
             $lastName = $user->last_name;

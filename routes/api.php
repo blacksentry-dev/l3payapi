@@ -32,7 +32,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
     Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
     Route::post('/users/forgot-password', [RegisterController::class, 'forgotPassword']);
-    Route::post('/users/verify-password-otp/{user_id}', [RegisterController::class, 'verifyResetPasswordOtp']);
+    Route::post('/users/verify-password-otp', [RegisterController::class, 'verifyResetPasswordOtp']);
     Route::post('/users/reset-password/{user_id}', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
     Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
