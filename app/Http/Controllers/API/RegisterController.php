@@ -108,6 +108,10 @@ class RegisterController extends BaseController
 
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['name'] =  $user->first_name;
+            $success['user_id'] =  $user->id;
+            $success['username'] =  $user->username;
+            $success['email'] =  $user->email;
+
 
             $email = $user->email;
             $firstName = $user->first_name;
