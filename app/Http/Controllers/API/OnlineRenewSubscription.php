@@ -40,7 +40,7 @@ class OnlineRenewSubscription extends BaseController
      */
     public function RenewSubscription(Request $request)
     {
-        $url = 'http://102.164.36.86:10080/24online/service/UserService/renewUser';
+        $url = 'https://102.164.36.86:10080/24online/service/UserService/renewUser';
 
         // Set the API request parameters as a JSON object
         $data = [
@@ -96,7 +96,7 @@ class OnlineRenewSubscription extends BaseController
      * )
      */
     public function getUserPassword(Request $request){
-        $url = 'http://102.164.36.86:10080/24online/service/UserService/getUserPassword';
+        $url = 'https://102.164.36.86:10080/24online/service/UserService/getUserPassword';
 
         // Set the API request parameters as a JSON object
         $data = [
@@ -148,7 +148,7 @@ class OnlineRenewSubscription extends BaseController
      * )
      */
     public function userStatus(Request $request){
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/userInfo';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/userInfo';
 
         try {
             // Make the API request using Laravel's HTTP client and add the username and password in the header
@@ -214,7 +214,7 @@ class OnlineRenewSubscription extends BaseController
      * )
      */
     public function getUserUsageInfo(Request $request){
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/usageInfo';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/usageInfo';
 
 
         try {
@@ -269,7 +269,7 @@ class OnlineRenewSubscription extends BaseController
      * )
      */
     public function getPaymentStatus(Request $request){
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/getPaymentStatus';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/getPaymentStatus';
 
         // Set the API request parameters as a JSON object
         $data = [
@@ -333,7 +333,7 @@ class OnlineRenewSubscription extends BaseController
      */
     public function RenewalHistory(Request $request)
     {
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/renewalHistory';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/renewalHistory';
 
         $data = [
             'month' => $request->month,
@@ -408,7 +408,7 @@ class OnlineRenewSubscription extends BaseController
      */
     public function getInvoiceDetail(Request $request)
     {
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/invoiceDetail';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/invoiceDetail';
 
         $data = [
             'beginindex' => $request->beginindex,
@@ -447,7 +447,7 @@ class OnlineRenewSubscription extends BaseController
 
     public function sessionUsageDetails(Request $request)
     {
-        $url = 'http://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
 
         $data = [
             'fromdate' => $request->fromdate,
