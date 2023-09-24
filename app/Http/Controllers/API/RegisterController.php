@@ -78,12 +78,16 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Lastname field can not be empty');
             }
 
-            if ($this->isEmailExistsInDatabase($request->input('email'))) {
-                return $this->returnError('Validation Error', 'Email already taken');
+            if ($this->isEmailExistsInDatabase($request->input('username'))) {
+                return $this->returnError('Validation Error', 'Username already taken');
             }
 
             if ($request->has('username') && empty($request->input('username'))) {
                 return $this->returnError('Validation Error', 'Username field can not be empty');
+            }
+
+            if ($request->has('email') && empty($request->input('email'))) {
+                return $this->returnError('Validation Error', 'Email field can not be empty');
             }
 
             // if ($this->isUsernameExistsInDatabase($request->input('username'))) {

@@ -445,9 +445,43 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/24online/session-usage-detail",
+     * operationId="Get User Usage Details",
+     * tags={"24Online (FTTH Subscription)"},
+     * summary="Get User Usage Details",
+     * description="Get User Invoice Details here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *              @OA\Property(property="fromdate", type="date", description="2000-01-01"),
+     *              @OA\Property(property="todate", type="date", description="2000-01-01"),
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Register Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Unprocessable Entity",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
+     *      @OA\Response(response=404, description="Resource Not Found"),
+     * )
+     */
     public function sessionUsageDetails(Request $request)
     {
-        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
+        $url = Http::withOptions(['verify' => false])->get('http://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails');
 
         $data = [
             'fromdate' => $request->fromdate,

@@ -537,6 +537,77 @@
                 }
             }
         },
+        "/api/24online/session-usage-detail": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Usage Details",
+                "description": "Get User Invoice Details here",
+                "operationId": "Get User Usage Details",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    },
+                                    "fromdate": {
+                                        "description": "2000-01-01",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "todate": {
+                                        "description": "2000-01-01",
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Register Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
