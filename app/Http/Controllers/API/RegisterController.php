@@ -535,29 +535,29 @@ class RegisterController extends BaseController
             $expiration = Carbon::now()->addMinutes(15);
 
             // Check if there's an existing token for the user
-        $existingToken = DB::table('password_reset_tokens')
-        ->where('user_id', $user->id)
-        ->first();
+            $existingToken = DB::table('password_reset_tokens')
+            ->where('user_id', $user->id)
+            ->first();
 
-        if ($existingToken) {
-            // Update existing token
-            DB::table('password_reset_tokens')
-                ->where('user_id', $user->id)
-                ->update([
+            if ($existingToken) {
+                // Update existing token
+                DB::table('password_reset_tokens')
+                    ->where('user_id', $user->id)
+                    ->update([
+                        'otp' => $otp,
+                        'expiration' => $expiration,
+                    ]);
+            } else {
+                // Create new token
+                DB::table('password_reset_tokens')->insert([
+                    'user_id' => $user->id,
+                    'email' => $email,
                     'otp' => $otp,
                     'expiration' => $expiration,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
-        } else {
-            // Create new token
-            DB::table('password_reset_tokens')->insert([
-                'user_id' => $user->id,
-                'email' => $email,
-                'otp' => $otp,
-                'expiration' => $expiration,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+            }
 
                 $this->sendPasswordResetEmail($email, $firstName, $lastName, $otp);
 
