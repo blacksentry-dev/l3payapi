@@ -712,13 +712,14 @@ class RegisterController extends BaseController
     {
         try {
             $user = User::where('username', $request->username)->first();
-            $email = $user->email;
-            $firstName = $user->first_name;
-            $lastName = $user->last_name;
 
             if (!$user) {
                 return $this->returnError('User not found.', [], 404);
             }
+
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
 
             // Update password
             // $input['password'] = bcrypt($input['password']);
@@ -788,13 +789,14 @@ class RegisterController extends BaseController
     {
         try {
             $user = User::find($request->user_id);
-            $email = $user->email;
-            $firstName = $user->first_name;
-            $lastName = $user->last_name;
-    
+
             if (!$user) {
                 return $this->returnError('User not found.', 404);
             }
+
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
     
             if (!Hash::check($request->input('recent_password'), $user->password)) {
                 return $this->returnError('Validation Error', 'Recent password is incorrect.', 401);
