@@ -78,7 +78,7 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Lastname field can not be empty');
             }
 
-            if ($this->isEmailExistsInDatabase($request->input('username'))) {
+            if ($this->isUsernameExistsInDatabase($request->input('username'))) {
                 return $this->returnError('Validation Error', 'Username already taken');
             }
 
@@ -436,6 +436,10 @@ class RegisterController extends BaseController
         try {
             $user = User::where('id', $request->user_id)->first();
 
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
+
             if (!$user) {
                 return $this->returnError('User not found.', 404);
             }
@@ -457,6 +461,7 @@ class RegisterController extends BaseController
                     'otp' => $otp,
                     'expiration' => now()->addMinutes(15),
                 ]);
+                $this->sendEmailOTP($email, $firstName, $lastName, $otp);
             } else {
                 $otp = $this->generateOTP();
     
@@ -465,6 +470,7 @@ class RegisterController extends BaseController
                     'expiration' => now()->addMinutes(15),
                     'user_id' => $user->id,
                 ]);
+                $this->sendEmailOTP($email, $firstName, $lastName, $otp);
             }
 
             return $this->returnSuccess($otp, 'Otp resent successfully.', 200);
