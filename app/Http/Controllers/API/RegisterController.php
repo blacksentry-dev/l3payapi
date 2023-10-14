@@ -434,7 +434,7 @@ class RegisterController extends BaseController
     public function resendOtp(Request $request): JsonResponse
     {
         try {
-            $user = User::where('id', $request->user_id)->first();
+            $user = User::where('username', $request->username)->first();
 
             $email = $user->email;
             $firstName = $user->first_name;
