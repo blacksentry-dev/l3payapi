@@ -52,7 +52,7 @@ class OnlineRenewSubscription extends BaseController
 
         try {
             // Make the API request using Laravel's HTTP client
-            $response = Http::post($url, $data);
+            $response = Http::withoutVerifying()->post($url, $data);
 
             $responseData = $response->json();
             if ($responseData["responsecode"] == 1) {
@@ -105,7 +105,8 @@ class OnlineRenewSubscription extends BaseController
 
         try {
             // Make the API request using Laravel's HTTP client
-            $response = Http::post($url, $data);
+            //The original format is -- Http::post
+            $response = Http::withoutVerifying()->post($url, $data);
             $responseData = $response->json();
             if ($responseData["responsecode"] == 1) {
                 $success['password'] =  $responseData["responsemsg"];
@@ -152,6 +153,7 @@ class OnlineRenewSubscription extends BaseController
 
         try {
             // Make the API request using Laravel's HTTP client and add the username and password in the header
+            //The original format is -- Http::withHeaders
             $response = Http::withoutVerifying()->withHeaders([
                 'username' => $request->username,
                 'password' => $request->password,
@@ -481,7 +483,7 @@ class OnlineRenewSubscription extends BaseController
      */
     public function sessionUsageDetails(Request $request)
     {
-        $url = Http::withOptions(['verify' => false])->get('http://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails');
+        $url = 'https://102.164.36.86:10080/24online/service/MyAccountService/sessionUsageDetails';
 
         $data = [
             'fromdate' => $request->fromdate,
