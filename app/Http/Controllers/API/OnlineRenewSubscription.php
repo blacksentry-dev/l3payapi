@@ -152,7 +152,7 @@ class OnlineRenewSubscription extends BaseController
 
         try {
             // Make the API request using Laravel's HTTP client and add the username and password in the header
-            $response = Http::withHeaders([
+            $response = Http::withoutVerifying()->withHeaders([
                 'username' => $request->username,
                 'password' => $request->password,
             ])->post($url);
