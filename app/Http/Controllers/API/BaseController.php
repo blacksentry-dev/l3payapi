@@ -116,9 +116,22 @@ class BaseController extends Controller
         $message .= "Please address issues accordingly.\n";
 
         Mail::raw($message, function ($emailMessage) use ($email, $firstName, $lastName) {
-            $emailMessage->to('wisgeorge.wg@gmail.com') // Support team's email address
+            $emailMessage->to('blacksentry@layer3.com.ng') // Support team's email address
                 ->from($email, "$firstName $lastName")
                 ->subject('New FTTH Ticket');
+        });
+    }
+
+    protected function feedbackAndRatingMail(string $email, string $firstName, string $lastName, string $feedback, int $rating): void
+    {
+        $message = "Howdy Blacksentry team, our LayerPay customer,\n\n";
+        $message .= "$firstName $lastName has rated the application $rating star with the following\n";
+        $message .= "Feedback: $feedback.\n\n";
+
+        Mail::raw($message, function ($emailMessage) use ($email, $firstName, $lastName) {
+            $emailMessage->to('blacksentry@layer3.com.ng') // Blacksentry team's email address
+                ->from($email, "$firstName $lastName")
+                ->subject('App rating and feedback');
         });
     }
 }

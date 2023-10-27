@@ -63,11 +63,19 @@ class FeedbackController extends BaseController
             return $this->sendError('User not found.', [], 404);
         }
 
-        $feedback = new Feedback();
-        $feedback->user_id = $user->id;
-        $feedback->feedback = $request->input('feedback');
-        $feedback->rating = $request->input('rating');
-        $feedback->save();
+        $email = $user->email;
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+        $feedback = $request->input('feedback');
+        $rating = $request->input('rating');
+
+        $success = new Feedback();
+        $success->user_id = $user->id;
+        $success->feedback = $feedback;
+        $success->rating = $rating;
+        $success->save();
+
+        $this->feedbackAndRatingMail($email, $firstName, $lastName, $feedback, $rating);
         
         return $this->sendResponse(['status' => 'success', 'feedback' => $feedback], 'Feedback submitted successfully.');
         

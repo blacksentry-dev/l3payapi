@@ -288,7 +288,7 @@ class OnlineRenewSubscription extends BaseController
             //return $responseData;
             if ($responseData["responsecode"] == 1) {
                 $success['paymentHistory'] =  $responseData["responsemsg"]["actionHistoryList"];
-                return $this->returnSuccess($success, 'User Password retrieved successfully.', 200);
+                return $this->returnSuccess($success, 'User payment status retrieved successfully.', 200);
             } else {
                 return $this->returnError('Error', $responseData["responsemsg"]);
             }
