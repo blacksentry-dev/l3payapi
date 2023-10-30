@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Wallet;
 
 class RegisterController extends BaseController
 {
@@ -110,12 +111,14 @@ class RegisterController extends BaseController
                 return $this->sendError('Something went wrong, please try again.', $user->errors());
             }
 
+            $walletBallance = 0.00;
+
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['name'] =  $user->first_name;
             $success['user_id'] =  $user->id;
             $success['username'] =  $user->username;
             $success['email'] =  $user->email;
-
+            $success['wallet_balance'] =  $walletBallance;
 
             $email = $user->email;
             $firstName = $user->first_name;
@@ -206,9 +209,18 @@ class RegisterController extends BaseController
     {
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
+            $walletBalance = Wallet::where('user_id', $user->id)->first();
+
+            if (!$walletBalance) {
+                $walletBalance = 0.00;
+            } else {
+                $walletBalance = $walletBalance->amount;
+            }
+
             if(!empty($user->email_verified_at)){
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 $success['user'] =  $user;
+                $success['wallet_balance'] = $walletBalance;
                 return $this->returnSuccess($success, 'User signed up successfully.');
             }
             return $this->returnError('Error', "You have not verified your email", 410);
