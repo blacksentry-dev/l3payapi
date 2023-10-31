@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\PaymentMethodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,7 +56,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class, 'getUserMonthlyTransaction']);
     Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
     Route::post('/user/transaction-pin/create', [TransactionController::class, 'setTransactionPin']);
-    Route::post('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
+    Route::put('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
 
     //Reminder
     Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
@@ -63,6 +64,11 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/reminder/cancel', [ReminderController::class, 'cancelPaymentReminder']);
     //Tickets
     Route::post('/tickets/create', [TicketController::class, 'createTicket']);
+    //Payment Methods
+    Route::post('/payment-method/create', [PaymentMethodController::class, 'addPaymentMethod']);
+    Route::post('/payment-method/delete', [PaymentMethodController::class, 'deletePaymentMethod']);
+    Route::put('/payment-method/update', [PaymentMethodController::class, 'updatePaymentMethod']);
+
 });
 
 
