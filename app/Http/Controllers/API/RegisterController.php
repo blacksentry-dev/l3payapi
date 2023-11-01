@@ -401,7 +401,10 @@ class RegisterController extends BaseController
             $user->verified = 1;
             $user->save();
 
+            $walletBallance = 0.00;
+
             $success['user'] =  $user;
+            $success['wallet_balance'] =  $walletBallance;
 
             return $this->returnSuccess($success, 'Email verification successful.');
         } catch (\Throwable $th) {
