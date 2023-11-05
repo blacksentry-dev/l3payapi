@@ -508,5 +508,35 @@ class OnlineRenewSubscription extends BaseController
             return $this->returnError('Error', $e->getMessage(), 500);
         }
     }
+
+    public function getUserAccountStatus(Request $request){
+        $url = 'https://102.164.36.86:10080/24online/service/UserService/getUserStatus';
+
+        // Set the API request parameters as a JSON object
+        $data = [
+            'username' => $request->username,
+            'accountNumber' => $request->accountNumber,
+        ];
+
+        try {
+            // Make the API request using Laravel's HTTP client
+            //The original format is -- Http::post
+            $response = Http::withoutVerifying()->post($url, $data);
+            $responseData = $response->json();
+            if ($responseData["responsecode"] == 2) {
+                $success['responsemsg'] =  $responseData["responsemsg"];
+                $success['accountStatus'] =  "Expired";
+                return $this->returnSuccess($success, 'User Account Status retrieved successfully.', 200);
+            } elseif ($responseData["responsecode"] == 3) {
+                $success['responsemsg'] =  $responseData["responsemsg"];
+                $success['accountStatus'] =  "Active";
+                return $this->returnSuccess($success, 'User Account Status retrieved successfully.', 200);
+            } {
+                return $this->returnError('Error', $responseData["responsemsg"]);
+            }
+        } catch (\Exception $e) {
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
+    }
 }
 
