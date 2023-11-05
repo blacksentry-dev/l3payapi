@@ -608,6 +608,73 @@
                 }
             }
         },
+        "/api/24online/user-account-status": {
+            "post": {
+                "tags": [
+                    "24Online (FTTH Subscription)"
+                ],
+                "summary": "Get User Account Status",
+                "description": "Get User Account Status here",
+                "operationId": "Get User Account Status",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "description": "The username of the user.",
+                                        "type": "string"
+                                    },
+                                    "accountNumber": {
+                                        "description": "The account number of the user.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User Account Status retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "responsemsg": {
+                                            "description": "Response message.",
+                                            "type": "string"
+                                        },
+                                        "accountStatus": {
+                                            "description": "The user's account status (Active/Expired).",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [

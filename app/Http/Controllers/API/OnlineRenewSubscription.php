@@ -509,6 +509,39 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/24online/user-account-status",
+     *     operationId="Get User Account Status",
+     *     tags={"24Online (FTTH Subscription)"},
+     *     summary="Get User Account Status",
+     *     description="Get User Account Status here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             @OA\Property(property="username", type="string", description="The username of the user."),
+     *             @OA\Property(property="accountNumber", type="string", description="The account number of the user.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User Account Status retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="responsemsg", type="string", description="Response message."),
+     *             @OA\Property(property="accountStatus", type="string", description="The user's account status (Active/Expired).")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Resource Not Found",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
     public function getUserAccountStatus(Request $request){
         $url = 'https://102.164.36.86:10080/24online/service/UserService/getUserStatus';
 
