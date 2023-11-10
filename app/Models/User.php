@@ -26,6 +26,7 @@ class User extends Authenticatable
         'username',
         'address',
         'transaction_pin',
+        'role'
     ];
 
     /**
@@ -62,5 +63,9 @@ class User extends Authenticatable
     public function passwordResetTokens()
     {
         return $this->hasMany(PasswordResetToken::class, 'email', 'email');
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }
