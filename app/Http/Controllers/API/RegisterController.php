@@ -217,8 +217,11 @@ class RegisterController extends BaseController
                 $walletBalance = $walletBalance->amount;
             }
 
+            $expirationTime = Carbon::now()->addHour()->timestamp;
+
             if(!empty($user->email_verified_at)){
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
+                $success['token_expires_at'] = $expirationTime;
                 $success['user'] =  $user;
                 $success['wallet_balance'] = $walletBalance;
                 return $this->returnSuccess($success, 'User signed up successfully.');
