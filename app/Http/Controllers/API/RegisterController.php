@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Wallet;
+use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 
 class RegisterController extends BaseController
 {
@@ -207,6 +208,14 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'g-recaptcha-response' => 'required|captcha'
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->returnError('Validation Error', 'reCaptcha validation failed');
+        }
+        
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $walletBalance = Wallet::where('user_id', $user->id)->first();
