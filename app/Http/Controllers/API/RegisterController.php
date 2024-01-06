@@ -208,13 +208,13 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'g-recaptcha-response' => 'required|captcha'
+        $captchaResponse = $request->input('g-recaptcha-response');
+
+        // Send a POST request to Google reCAPTCHA verification endpoint
+        $verificationResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => 'YOUR_RECAPTCHA_SECRET_KEY', // Replace with your secret key
+            'response' => $captchaResponse,
         ]);
-    
-        if ($validator->fails()) {
-            return $this->returnError('Validation Error', 'reCaptcha validation failed');
-        }
         
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
