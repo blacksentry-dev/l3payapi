@@ -208,15 +208,6 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        $captchaResponse = $request->input('g-recaptcha-response');
-        $captchaSecretKey = env("RECAPTCHA_SECRET_KEY");
-
-        // Send a POST request to Google reCAPTCHA verification endpoint
-        $verificationResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => $captchaSecretKey, 
-            'response' => $captchaResponse,
-        ]);
-        
         
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
