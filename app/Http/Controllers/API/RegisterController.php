@@ -218,7 +218,7 @@ class RegisterController extends BaseController
         ]);
         
         
-        if(Auth::attempt(['username' => $request->username, 'password' => $request->password]) && $verificationResponse->json()['success']){ 
+        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $walletBalance = Wallet::where('user_id', $user->id)->first();
 
