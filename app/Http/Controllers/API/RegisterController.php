@@ -216,30 +216,37 @@ class RegisterController extends BaseController
             'secret' => $captchaSecretKey, 
             'response' => $captchaResponse,
         ]);
-        
-        if(Auth::attempt(['username' => $request->username, 'password' => $request->password]) && $verificationResponse->json()['success']){ 
-            $user = Auth::user(); 
-            $walletBalance = Wallet::where('user_id', $user->id)->first();
 
-            if (!$walletBalance) {
-                $walletBalance = 0.00;
-            } else {
-                $walletBalance = $walletBalance->amount;
-            }
+        $user = User::where('username', $request->username)->first();
 
-            $expirationTime = Carbon::now()->addHour()->timestamp;
-
-            if(!empty($user->email_verified_at)){
-                $success['token'] =  $user->createToken('MyApp')->accessToken;
-                $success['token_expires_at'] = $expirationTime;
-                $success['user'] =  $user;
-                $success['wallet_balance'] = $walletBalance;
-                return $this->returnSuccess($success, 'User signed up successfully.');
-            }
-            return $this->returnError('Error', "You have not verified your email", 410);
-        }else{ 
-            return $this->returnError('Error', 'Invalid username or password', 401);
-        } 
+        if ($user && Hash::check($request->password, $user->password)) {
+            if(Auth::attempt(['username' => $request->username, 'password' => $request->password]) && $verificationResponse->json()['success']){ 
+                $user = Auth::user(); 
+                $walletBalance = Wallet::where('user_id', $user->id)->first();
+    
+                if (!$walletBalance) {
+                    $walletBalance = 0.00;
+                } else {
+                    $walletBalance = $walletBalance->amount;
+                }
+    
+                $expirationTime = Carbon::now()->addHour()->timestamp;
+    
+                if(!empty($user->email_verified_at)){
+                    $success['token'] =  $user->createToken('MyApp')->accessToken;
+                    $success['token_expires_at'] = $expirationTime;
+                    $success['user'] =  $user;
+                    $success['wallet_balance'] = $walletBalance;
+                    return $this->returnSuccess($success, 'User signed up successfully.');
+                }
+                return $this->returnError('Error', "You have not verified your email", 410);
+            }else{ 
+                return $this->returnError('Error', 'Invalid username or password', 401);
+            } 
+        } else {
+            return $this->returnError('Error', 'Captcha Verification Failed', 50);
+        }
+                
     }
 
 
