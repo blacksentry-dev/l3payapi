@@ -216,15 +216,8 @@ class RegisterController extends BaseController
             'secret' => $captchaSecretKey, 
             'response' => $captchaResponse,
         ]);
-
-        $user = User::where('username', $request->username)->first();
-
-        if ($user && Hash::check($request->password, $user->password)) {
-            return $this->returnSuccess('Success', 'User match well');
-        } else {
-            return $this->returnError('Error', 'User match well');
-        }
-                
+        
+        
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password]) && $verificationResponse->json()['success']){ 
             $user = Auth::user(); 
             $walletBalance = Wallet::where('user_id', $user->id)->first();
