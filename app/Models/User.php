@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -68,4 +69,37 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    // Encrypt sensitive fields before saving to the database
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['first_name'] = Crypt::encrypt($value);
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = Crypt::encrypt($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = Crypt::encrypt($value);
+    }
+
+    // Decrypt sensitive fields when retrieving from the database
+    public function getFirstNameAttribute($value)
+    {
+        return Crypt::decrypt($value);
+    }
+
+    public function getLastNameAttribute($value)
+    {
+        return Crypt::decrypt($value);
+    }
+
+    public function getEmailAttribute($value)
+    {
+        return Crypt::decrypt($value);
+    }
+
 }
