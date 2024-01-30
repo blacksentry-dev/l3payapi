@@ -966,7 +966,7 @@
                                 ],
                                 "properties": {
                                     "username": {
-                                        "type": "integer"
+                                        "type": "sring"
                                     }
                                 },
                                 "type": "object"
@@ -1017,7 +1017,7 @@
                 "operationId": "forgotPassword",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "username"
@@ -1029,9 +1029,6 @@
                                 },
                                 "type": "object"
                             }
-                        },
-                        "application/json": {
-                            "schema": {}
                         }
                     }
                 },

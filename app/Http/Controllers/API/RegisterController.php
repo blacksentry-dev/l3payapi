@@ -425,7 +425,7 @@ class RegisterController extends BaseController
      *         @OA\JsonContent(
      *              type="object",
      *               required={"user_id"},
-     *               @OA\Property(property="username", type="integer"),
+     *               @OA\Property(property="username", type="sring"),
      *         ),
      *     ),
      *     @OA\Response(
@@ -497,15 +497,11 @@ class RegisterController extends BaseController
      *     summary="Send password reset OTP",
      *     description="Send a one-time password (OTP) to the user's email for password reset.",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *            @OA\Schema(
-     *               type="object",
+     *         @OA\JsonContent(
+     *              type="object",
      *               required={"username"},
      *               @OA\Property(property="username", type="string"),
-     *            ),
-     *        ),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
