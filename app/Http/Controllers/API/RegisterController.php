@@ -34,20 +34,16 @@ class RegisterController extends BaseController
      * summary="User Register",
      * description="User Register here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *            @OA\Schema(
+     *         @OA\JsonContent(
      *               type="object",
      *               required={"first_name","last_name","email", "username", "password", "password_confirmation"},
-     *               @OA\Property(property="first_name", type="text"),
-     *               @OA\Property(property="last_name", type="text"),
-     *               @OA\Property(property="email", type="text"),
-     *               @OA\Property(property="username", type="text"),
-     *               @OA\Property(property="password", type="password"),
-     *               @OA\Property(property="password_confirmation", type="password")
-     *            ),
-     *        ),
+     *               @OA\Property(property="first_name", type="string"),
+     *               @OA\Property(property="last_name", type="string"),
+     *               @OA\Property(property="email", type="string"),
+     *               @OA\Property(property="username", type="string"),
+     *               @OA\Property(property="password", type="string"),
+     *               @OA\Property(property="password_confirmation", type="string")
+     *          ),
      *    ),
      *      @OA\Response(
      *          response=201,
@@ -176,16 +172,12 @@ class RegisterController extends BaseController
      * summary="User Login",
      * description="Login User Here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *            @OA\Schema(
-     *               type="object",
+     *         @OA\JsonContent(
+     *              type="object",
      *               required={"username", "password"},
      *               @OA\Property(property="username", type="text"),
      *               @OA\Property(property="password", type="password")
-     *            ),
-     *        ),
+     *          ),
      *    ),
      *      @OA\Response(
      *          response=201,

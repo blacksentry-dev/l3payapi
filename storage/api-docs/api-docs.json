@@ -685,7 +685,7 @@
                 "operationId": "Register",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "first_name",
@@ -697,29 +697,26 @@
                                 ],
                                 "properties": {
                                     "first_name": {
-                                        "type": "text"
+                                        "type": "string"
                                     },
                                     "last_name": {
-                                        "type": "text"
+                                        "type": "string"
                                     },
                                     "email": {
-                                        "type": "text"
+                                        "type": "string"
                                     },
                                     "username": {
-                                        "type": "text"
+                                        "type": "string"
                                     },
                                     "password": {
-                                        "type": "password"
+                                        "type": "string"
                                     },
                                     "password_confirmation": {
-                                        "type": "password"
+                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
                             }
-                        },
-                        "application/json": {
-                            "schema": {}
                         }
                     }
                 },
@@ -767,7 +764,7 @@
                 "operationId": "authLogin",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "username",
@@ -783,9 +780,6 @@
                                 },
                                 "type": "object"
                             }
-                        },
-                        "application/json": {
-                            "schema": {}
                         }
                     }
                 },
