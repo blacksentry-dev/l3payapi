@@ -353,7 +353,23 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
@@ -403,6 +419,14 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "month",
+                                    "year",
+                                    "beginindex",
+                                    "count"
+                                ],
                                 "properties": {
                                     "username": {
                                         "description": "Username",
@@ -480,6 +504,12 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "beginindex",
+                                    "count"
+                                ],
                                 "properties": {
                                     "username": {
                                         "description": "Username",
@@ -549,6 +579,12 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "fromdate",
+                                    "todate"
+                                ],
                                 "properties": {
                                     "username": {
                                         "description": "Username",
@@ -620,6 +656,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "username",
+                                    "accountNumber"
+                                ],
                                 "properties": {
                                     "username": {
                                         "description": "The username of the user.",

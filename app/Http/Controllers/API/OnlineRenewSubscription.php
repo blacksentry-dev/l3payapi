@@ -249,7 +249,11 @@ class OnlineRenewSubscription extends BaseController
      * summary="Get User Payment Status",
      * description="Get User Payment Status here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
+     *         @OA\JsonContent(
+     *              required={"username", "password"},
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *         ),
      *    ),
      *      @OA\Response(
      *          response=201,
@@ -306,6 +310,7 @@ class OnlineRenewSubscription extends BaseController
      * description="Get User Renewal History here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *              required={"username", "password", "month", "year", "beginindex", "count"},
      *              @OA\Property(property="username", type="string", description="Username"),
      *              @OA\Property(property="password", type="string", description="Password"),
      *              @OA\Property(property="month", type="string", description="Month to start"),
@@ -383,6 +388,7 @@ class OnlineRenewSubscription extends BaseController
      * description="Get User Invoice Details here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *              required={"username", "password", "beginindex", "count"},
      *              @OA\Property(property="username", type="string", description="Username"),
      *              @OA\Property(property="password", type="string", description="Password"),
      *              @OA\Property(property="beginindex", type="integer", description="The beginning index"),
@@ -456,6 +462,7 @@ class OnlineRenewSubscription extends BaseController
      * description="Get User Invoice Details here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *              required={"username", "password", "fromdate", "todate"},
      *              @OA\Property(property="username", type="string", description="Username"),
      *              @OA\Property(property="password", type="string", description="Password"),
      *              @OA\Property(property="fromdate", type="date", description="2000-01-01"),
@@ -518,6 +525,7 @@ class OnlineRenewSubscription extends BaseController
      *     description="Get User Account Status here",
      *     @OA\RequestBody(
      *         @OA\JsonContent(
+     *             required={"username", "accountNumber"},
      *             @OA\Property(property="username", type="string", description="The username of the user."),
      *             @OA\Property(property="accountNumber", type="string", description="The account number of the user.")
      *         )
