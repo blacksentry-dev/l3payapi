@@ -772,10 +772,10 @@
                                 ],
                                 "properties": {
                                     "username": {
-                                        "type": "text"
+                                        "type": "string"
                                     },
                                     "password": {
-                                        "type": "password"
+                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
@@ -828,7 +828,32 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    ""
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "phone_number": {
+                                        "type": "integer"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
@@ -873,7 +898,7 @@
                 "operationId": "verifyEmail",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "otp"
@@ -885,9 +910,6 @@
                                 },
                                 "type": "object"
                             }
-                        },
-                        "application/json": {
-                            "schema": {}
                         }
                     }
                 },
@@ -937,21 +959,18 @@
                 "operationId": "resendOtp",
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "user_id"
                                 ],
                                 "properties": {
-                                    "user_id": {
+                                    "username": {
                                         "type": "integer"
                                     }
                                 },
                                 "type": "object"
                             }
-                        },
-                        "application/json": {
-                            "schema": {}
                         }
                     }
                 },

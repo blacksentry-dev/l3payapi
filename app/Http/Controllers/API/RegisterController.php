@@ -175,8 +175,8 @@ class RegisterController extends BaseController
      *         @OA\JsonContent(
      *              type="object",
      *               required={"username", "password"},
-     *               @OA\Property(property="username", type="text"),
-     *               @OA\Property(property="password", type="password")
+     *               @OA\Property(property="username", type="string"),
+     *               @OA\Property(property="password", type="string")
      *          ),
      *    ),
      *      @OA\Response(
@@ -236,12 +236,16 @@ class RegisterController extends BaseController
      *     description="Update user profile information",
      *     security={{ "bearerAuth":{} }},
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *            @OA\Schema(
-     *               type="object",
+     *         @OA\JsonContent(
+     *              type="object",
      *               required={""},
-     *               @OA\Property(property="address", type="string"),
-     *            ),
+     *               @OA\Property(property="first_name", type="string"),
+     *               @OA\Property(property="last_name", type="string"),
+     *               @OA\Property(property="username", type="string"),
+     *               @OA\Property(property="phone_number", type="integer"),
+     *               @OA\Property(property="email", type="string"),
+     *               @OA\Property(property="address", type="string")
+     *         ),
      *    ),
      *    @OA\Response(
      *        response=201,
@@ -341,15 +345,11 @@ class RegisterController extends BaseController
      *     summary="Verify Email",
      *     description="Verify user's email using the OTP.",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *            @OA\Schema(
-     *               type="object",
+     *         @OA\JsonContent(
+     *              type="object",
      *               required={"otp"},
      *               @OA\Property(property="otp", type="string"),
-     *            ),
-     *        ),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -422,15 +422,11 @@ class RegisterController extends BaseController
      *     summary="Resend OTP to the user's email",
      *     description="Resend OTP to the user's email if they have not been verified or if the previous OTP has expired.",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
-     *         @OA\MediaType(
-     *            mediaType="multipart/form-data",
-     *            @OA\Schema(
-     *               type="object",
+     *         @OA\JsonContent(
+     *              type="object",
      *               required={"user_id"},
-     *               @OA\Property(property="user_id", type="integer"),
-     *            ),
-     *        ),
+     *               @OA\Property(property="username", type="integer"),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
