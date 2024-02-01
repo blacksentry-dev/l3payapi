@@ -17,7 +17,11 @@ class OnlineRenewSubscription extends BaseController
      * summary="User Renew Subscription",
      * description="User Renew Subscription here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
+     *         @OA\JsonContent(
+     *              type="object",
+     *               required={"username"},
+     *               @OA\Property(property="username", type="string"),
+     *         ),
      *    ),
      *      @OA\Response(
      *          response=201,
@@ -74,7 +78,10 @@ class OnlineRenewSubscription extends BaseController
      * summary="Get User Password",
      * description="Get User Password here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
+     *         @OA\JsonContent(
+     *              required={"username"},
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *         ),
      *    ),
      *      @OA\Response(
      *          response=201,
@@ -127,7 +134,11 @@ class OnlineRenewSubscription extends BaseController
      * summary="Get User Status",
      * description="Get User Status here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
+     *         @OA\JsonContent(
+     *              required={"username", "password"},
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *         ),
      *    ),
      *      @OA\Response(
      *          response=201,
@@ -194,7 +205,11 @@ class OnlineRenewSubscription extends BaseController
      * summary="Get User Usage Information",
      * description="Get User Usage Information here",
      *     @OA\RequestBody(
-     *         @OA\JsonContent(),
+     *         @OA\JsonContent(
+     *              required={"username", "password"},
+     *              @OA\Property(property="username", type="string", description="Username"),
+     *              @OA\Property(property="password", type="string", description="Password"),
+     *         ),
      *    ),
      *      @OA\Response(
      *          response=201,
