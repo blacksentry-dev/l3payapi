@@ -292,7 +292,13 @@ class TransactionController extends BaseController
             $transaction = Transaction::where('user_id', $user_id)
             ->where('category', $category)
             ->orderBy('id', 'DESC')->get();
-            return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
+            if ($transaction->isEmpty()) {
+                // Return an empty array with a 204 status code (No Content)
+                return $this->returnSuccess([], 'No transactions found.', 204);
+            } else {
+                return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
+            }
+            // return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
         } catch (\Throwable $th) {
             return $this->returnError("Error", $th->getMessage(), 500);
         }
