@@ -153,7 +153,7 @@ class TransactionController extends BaseController
             // }
             if ($transaction->isEmpty()) {
                 // Return an empty array with a 204 status code (No Content)
-                return $this->returnSuccess([], 'No transactions found.', 204);
+                return $this->returnSuccess("[]", 'No transactions found.', 204);
             } else {
                 return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
             }
@@ -294,7 +294,7 @@ class TransactionController extends BaseController
             ->orderBy('id', 'DESC')->get();
             if ($transaction->isEmpty()) {
                 // Return an empty array with a 204 status code (No Content)
-                return $this->returnSuccess([], 'No transactions found.', 204);
+                return $this->returnSuccess("[]", 'No transactions found.', 204);
             } else {
                 return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
             }
