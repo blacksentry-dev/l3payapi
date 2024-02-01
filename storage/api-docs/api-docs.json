@@ -157,7 +157,17 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    "username"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
@@ -206,7 +216,18 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    "username"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
@@ -255,7 +276,23 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
@@ -304,7 +341,23 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "schema": {}
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "description": "Username",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
                 },
