@@ -146,16 +146,10 @@ class TransactionController extends BaseController
     public function getUserTransaction($user_id){
         try {
             $transaction = Transaction::where('user_id', $user_id)->orderBy('id', 'DESC')->get();
-            // if(count($transaction) > 0){
-            //     return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
-            // }else{
-            //     return $this->returnError($transaction, 'Transaction not found', 404);
-            // }
-            if ($transaction->isEmpty()) {
-                // Return an empty array with a 204 status code (No Content)
-                return $this->returnSuccess([], 'No transactions found.', 204);
-            } else {
+            if(count($transaction) > 0){
                 return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
+            }else{
+                return $this->returnError($transaction, 'Transaction not found', 404);
             }
         } catch (\Throwable $th) {
             return $this->returnError("Error", $th->getMessage(), 500);
@@ -292,13 +286,7 @@ class TransactionController extends BaseController
             $transaction = Transaction::where('user_id', $user_id)
             ->where('category', $category)
             ->orderBy('id', 'DESC')->get();
-            if ($transaction->isEmpty()) {
-                // Return an empty array with a 204 status code (No Content)
-                return $this->returnSuccess([], 'No transactions found.', 204);
-            } else {
-                return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
-            }
-            // return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
+            return $this->returnSuccess($transaction, 'Transactions retrieved successfully.', 200);
         } catch (\Throwable $th) {
             return $this->returnError("Error", $th->getMessage(), 500);
         }
