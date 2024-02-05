@@ -177,36 +177,36 @@ class WalletController extends BaseController
     }
 
 
-    /**
-     * @OA\Post(
-     *     path="/api/wallet/payment",
-     *     operationId="walletPayment",
-     *     tags={"Wallet"},
-     *     summary="Make a payment from the user's wallet",
-     *     description="Make a payment from the user's wallet balance.",
-     *     security={{ "bearerAuth":{} }},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             required={"user_id", "payment_amount", "bill_id"},
-     *             @OA\Property(property="user_id", type="string"),
-     *             @OA\Property(property="payment_amount", type="number", format="float"),
-     *             @OA\Property(property="bill_id", type="string"),
-     *         ),
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Payment successful.",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Payment successful.")
-     *         )
-     *     ),
-     *     @OA\Response(response=400, description="Bad request"),
-     *     @OA\Response(response=401, description="Unauthorized"),
-     *     @OA\Response(response=404, description="User not found"),
-     *     @OA\Response(response=422, description="Unprocessable Entity"),
-     * )
-     */
+    // /**
+    //  * @OA\Post(
+    //  *     path="/api/wallet/payment",
+    //  *     operationId="walletPayment",
+    //  *     tags={"Wallet"},
+    //  *     summary="Make a payment from the user's wallet",
+    //  *     description="Make a payment from the user's wallet balance.",
+    //  *     security={{ "bearerAuth":{} }},
+    //  *     @OA\RequestBody(
+    //  *         @OA\JsonContent(
+    //  *             required={"user_id", "payment_amount", "bill_id"},
+    //  *             @OA\Property(property="user_id", type="string"),
+    //  *             @OA\Property(property="payment_amount", type="number", format="float"),
+    //  *             @OA\Property(property="bill_id", type="string"),
+    //  *         ),
+    //  *     ),
+    //  *     @OA\Response(
+    //  *         response=200,
+    //  *         description="Payment successful.",
+    //  *         @OA\JsonContent(
+    //  *             @OA\Property(property="status", type="string", example="success"),
+    //  *             @OA\Property(property="message", type="string", example="Payment successful.")
+    //  *         )
+    //  *     ),
+    //  *     @OA\Response(response=400, description="Bad request"),
+    //  *     @OA\Response(response=401, description="Unauthorized"),
+    //  *     @OA\Response(response=404, description="User not found"),
+    //  *     @OA\Response(response=422, description="Unprocessable Entity"),
+    //  * )
+    //  */
 
     public function makeWalletPayment(Request $request, $user_id): JsonResponse
     {
