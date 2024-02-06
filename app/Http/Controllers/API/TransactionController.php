@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -419,5 +420,32 @@ class TransactionController extends BaseController
             return $this->returnError("Error", $th->getMessage(), 500);
         }
         
+    }
+
+        
+    public function verifyTransactionPin(Request $request)
+    {
+        try {
+            // Validate the request data (e.g., PIN, user ID)
+            $request->validate([
+                'user_id' => 'required',
+                'transaction_pin' => 'required|digits:4', // Adjust validation rules as needed
+            ]);
+
+            $user = User::find($request->user_id);
+
+            if (!$user) {
+                return $this->sendError('User not found.', [], 404);
+            }
+
+            // Check if the provided PIN matches the stored hashed PIN
+            if (Hash::check($request->transaction_pin, $user->transaction_pin)) {
+                return response()->json(['message' => 'Transaction PIN verified successfully']);
+            } else {
+                return $this->sendError('Incorrect transaction PIN.', [], 422);
+            }
+        } catch (\Throwable $th) {
+            return $this->returnError("Error", $th->getMessage(), 500);
+        }
     }
 }
