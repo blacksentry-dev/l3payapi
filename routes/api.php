@@ -89,6 +89,7 @@ Route::get('/user/monthly-transaction/{user_id}', [TransactionController::class,
 Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
 Route::post('/user/transaction-pin/create', [TransactionController::class, 'setTransactionPin']);
 Route::post('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
+Route::post('/user/transaction-pin/verify', [TransactionController::class, 'verifyTransactionPin']);
 
 Route::post('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
 Route::post('24online/user-status', [OnlineRenewSubscription::class, 'UserStatus']);

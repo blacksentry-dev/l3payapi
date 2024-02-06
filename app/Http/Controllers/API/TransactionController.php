@@ -422,7 +422,36 @@ class TransactionController extends BaseController
         
     }
 
-        
+    /**
+     * @OA\Post(
+     *     path="/api/transaction-pin/verify",
+     *     operationId="verifyTransactionPin",
+     *     tags={"Transaction Pin"},
+     *     summary="Set a user's transaction PIN.",
+     *     description="Set a user's transaction PIN.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="JSON request body for setting transaction PIN",
+     *         @OA\JsonContent(
+     *             required={"user_id", "transaction_pin"},
+     *             @OA\Property(property="user_id", type="integer", example="1"),
+     *             @OA\Property(property="transaction_pin", type="integer", example="1234"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Transaction PIN set successfully.",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found.",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error.",
+     *     ),
+     * )
+     */    
     public function verifyTransactionPin(Request $request)
     {
         try {

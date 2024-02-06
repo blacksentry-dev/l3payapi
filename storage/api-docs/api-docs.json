@@ -1949,6 +1949,52 @@
                 }
             }
         },
+        "/api/transaction-pin/verify": {
+            "post": {
+                "tags": [
+                    "Transaction Pin"
+                ],
+                "summary": "Set a user's transaction PIN.",
+                "description": "Set a user's transaction PIN.",
+                "operationId": "verifyTransactionPin",
+                "requestBody": {
+                    "description": "JSON request body for setting transaction PIN",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "transaction_pin"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "transaction_pin": {
+                                        "type": "integer",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transaction PIN set successfully."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
+                    }
+                }
+            }
+        },
         "/api/wallet/create": {
             "post": {
                 "tags": [
