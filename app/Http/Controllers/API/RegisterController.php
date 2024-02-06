@@ -892,7 +892,7 @@ class RegisterController extends BaseController
      *         required=true,
      *         description="The ID of the user",
      *         @OA\Schema(
-     *             type="integer"
+     *             type="string"
      *         )
      *     ),
      *     @OA\Response(
@@ -937,7 +937,7 @@ class RegisterController extends BaseController
                 return $this->sendError('User not found.', [], 404);
             }
 
-            $wallet =  Wallet::where("user_id", "=", $request->user_id)->get();
+            $wallet =  Wallet::where("user_id", "=", $request->user_id)->first();
 
             // You can customize the data you want to include in the response
             $userData = [
@@ -946,7 +946,7 @@ class RegisterController extends BaseController
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'walletBannce' => $wallet->amount,
+                'walletBalance' => $wallet,
                 
                 // Add more fields as needed
             ];

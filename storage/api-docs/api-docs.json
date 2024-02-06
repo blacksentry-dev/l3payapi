@@ -1578,7 +1578,7 @@
                         "description": "The ID of the user",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
