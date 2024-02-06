@@ -837,4 +837,126 @@ class RegisterController extends BaseController
             return $this->returnError('Error', $th->getMessage(), 500);
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/users/get-info",
+     *     operationId="getUserInfo",
+     *     tags={"Get User Info"},
+     *     summary="Get user information",
+     *     description="Get user information by user ID.",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=true,
+     *         description="The ID of the user",
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="user_id", type="integer", example=1),
+     *             @OA\Property(property="username", type="string", example="john_doe"),
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", example="john@example.com"),
+     *             @OA\Property(property="phone", type="string", example="+1234567890"),
+     *             @OA\Property(property="walletBalance", type="number", example=100.0),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="User not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Internal Server Error.")
+     *         )
+     *     )
+     * )
+     */
+    public function getUserDetails(Request $request, $user_id): JsonResponse
+    {
+        try {
+            $user = User::find($request->user_id);
+
+            if (!$user) {
+                return $this->returnError('User not found.', 404);
+            }
+
+            $email = $user->email;
+            $firstName = $user->first_name;
+            $lastName = $user->last_name;
+    
+            if (!Hash::check($request->input('recent_password'), $user->password)) {
+                return $this->returnError('Validation Error', 'Recent password is incorrect.', 401);
+            }
+    
+            if (empty($request->input('new_password')) || empty($request->input('confirm_new_password'))) {
+                return $this->returnError('Validation Error', 'New password and confirm new password fields cannot be empty.', 401);
+            }
+    
+            if ($request->input('new_password') !== $request->input('confirm_new_password')) {
+                return $this->returnError('Validation Error', 'New password and confirm new password do not match.', 401);
+            }
+
+            // Add password strength validation here
+            if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('new_password'))) {
+                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
+            }
+    
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
+
+            $this->PasswordResetSuccessMail($email, $firstName, $lastName);
+    
+            return $this->returnSuccess('Password changed successfully.', 200);
+        } catch (\Throwable $th) {
+            return $this->returnError('Error', $th->getMessage(), 500);
+        }
+    }
+    
+    public function getUserInfo(Request $request)
+    {
+        try {
+            // Validate the request data (e.g., user ID)
+            $request->validate([
+                'user_id' => 'required',
+            ]);
+
+            $user = User::find($request->user_id);
+
+            if (!$user) {
+                return $this->sendError('User not found.', [], 404);
+            }
+
+            $walletBallance =  Wallet::where("user_id", "=", $user->id)->get();
+
+            // You can customize the data you want to include in the response
+            $userData = [
+                'user_id' => $user->id,
+                'username' => $user->name,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'walletBannce' => $walletBallance->amount,
+                
+                // Add more fields as needed
+            ];
+
+            if (!$userData){
+                throw new \Exception('No data available for this user');
+            }
+            return response()->json(['user' => $userData]);
+        } catch (\Throwable $th) {
+            return $this->returnError("Error", $th->getMessage(), 500);
+        }
+    }
 }

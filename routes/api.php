@@ -37,6 +37,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/users/reset-password', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
     Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
+    Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
 
     //Feedback and Rating
     Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
@@ -57,6 +58,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/user/user-transaction-category/{category}/{user_id}', [TransactionController::class, 'getUserTransactionByCategory']);
     Route::post('/user/transaction-pin/create', [TransactionController::class, 'setTransactionPin']);
     Route::put('/user/transaction-pin/update', [TransactionController::class, 'updateTransactionPin']);
+    Route::post('/user/transaction-pin/verify', [TransactionController::class, 'verifyTransactionPin']);
 
     //Reminder
     Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
