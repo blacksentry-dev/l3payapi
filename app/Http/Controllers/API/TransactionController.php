@@ -469,7 +469,7 @@ class TransactionController extends BaseController
 
             // Check if the provided PIN matches the stored hashed PIN
             if (Hash::check($request->transaction_pin, $user->transaction_pin)) {
-                return response()->json(['message' => 'Transaction PIN verified successfully']);
+                return response()->json(['message' => 'Match, Transaction PIN verified successfully']);
             } else {
                 return $this->sendError('Incorrect transaction PIN.', [], 422);
             }
