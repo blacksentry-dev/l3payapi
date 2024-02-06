@@ -946,7 +946,7 @@ class RegisterController extends BaseController
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'walletBannce' => $wallet,
+                'walletBannce' => $wallet->amount,
                 
                 // Add more fields as needed
             ];
