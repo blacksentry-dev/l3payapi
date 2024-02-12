@@ -535,7 +535,7 @@ class RegisterController extends BaseController
             $user = User::where('username', $request->username)->first();
 
             if (!$user) {
-                return $this->returnError('User not found.', 404);
+                return $this->returnError('Check the provided email for otp.', 404);
             }
 
             $email = $user->email;
