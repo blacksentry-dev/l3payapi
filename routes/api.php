@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\API\PaymentMethodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\API\TicketController;
+
 use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\API\FcmbWalletController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ReminderController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\OnlineRenewSubscription;
+use App\Http\Controllers\API\PaymentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,18 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/payment-method/create', [PaymentMethodController::class, 'addPaymentMethod']);
     Route::post('/payment-method/delete', [PaymentMethodController::class, 'deletePaymentMethod']);
     Route::put('/payment-method/update', [PaymentMethodController::class, 'updatePaymentMethod']);
+    //24Online
+    Route::post('24online/renew-package', [OnlineRenewSubscription::class, 'RenewSubscription']);
+    Route::post('24online/user-status', [OnlineRenewSubscription::class, 'UserStatus']);
+    Route::post('24online/renewal-history', [OnlineRenewSubscription::class, 'RenewalHistory']);
+    Route::post('24online/user-password', [OnlineRenewSubscription::class, 'getUserPassword']);
+    Route::post('24online/user-usage-info', [OnlineRenewSubscription::class, 'getUserUsageInfo']);
+    Route::post('24online/payment-status', [OnlineRenewSubscription::class, 'getPaymentStatus']);
+    Route::post('24online/invoice-detail', [OnlineRenewSubscription::class, 'getInvoiceDetail']);
+    Route::post('24online/session-usage-detail', [OnlineRenewSubscription::class, 'sessionUsageDetails']);
+    Route::post('24online/user-account-status', [OnlineRenewSubscription::class, 'getUserAccountStatus']);
+    //FCMB
+    Route::post('fcmbank/account/create', [FcmbWalletController::class, 'createUserBankWalletAccount']);
 
 });
 
@@ -112,3 +125,5 @@ Route::middleware('auth:api')->group( function () {
 Route::post('/reminder/schedule', [ReminderController::class, 'schedulePaymentReminder']);
 Route::get('/reminder/user-reminder', [ReminderController::class, 'getPaymentReminders']);
 Route::post('/reminder/cancel', [ReminderController::class, 'cancelPaymentReminder']);
+//FCMB
+Route::post('fcmbank/account/create', [FcmbWalletController::class, 'createUserBankWalletAccount']);

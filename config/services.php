@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'bank_api' => [
+        'base_url' => env('BANK_API_BASE_URL', 'https://devapi.fcmb.com/OpenAccount-clone'),
+        'client_id' => env('BANK_API_CLIENT_ID', 250),
+        'subscription_key' => env('BANK_API_SUBSCRIPTION_KEY', 'Layer3pay'),
+    ],
+
 ];
