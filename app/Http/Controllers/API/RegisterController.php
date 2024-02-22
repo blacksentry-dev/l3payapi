@@ -736,6 +736,10 @@ class RegisterController extends BaseController
             // Update password
             // $input['password'] = bcrypt($input['password']);
             $user->password = bcrypt($request->input('password'));
+
+            if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('password'))) {
+                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
+            }
             $user->save();
 
             // Send password reset success email

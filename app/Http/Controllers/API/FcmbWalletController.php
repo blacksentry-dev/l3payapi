@@ -22,7 +22,7 @@ class FcmbWalletController extends BaseController
         $requestData = $request->all();
 
         // Specify the endpoint for creating a base retail account
-        $endpoint = '/api/Accounts/v2/CreateBaseRetailAccount';
+        $endpoint = '/OpenAccount-clone/api/Accounts/v2/CreateBaseRetailAccount';
 
         // Call the Bank API service to create an account
         $response = $this->bankApiService->sendRequest($endpoint, 'post', $requestData);
