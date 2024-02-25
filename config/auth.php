@@ -44,7 +44,7 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
-            'expire_in' => 60 * 1, // Set the expiration time in minutes (e.g., 24 hours)
+            'expire_in' => 60, // Set the expiration time in minutes (e.g., 24 hours)
         ],
     ],
 

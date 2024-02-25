@@ -842,46 +842,6 @@ class RegisterController extends BaseController
         }
     }
 
-    public function getUserDetails(Request $request, $user_id): JsonResponse
-    {
-        try {
-            $user = User::find($request->user_id);
-
-            if (!$user) {
-                return $this->returnError('User not found.', 404);
-            }
-
-            $email = $user->email;
-            $firstName = $user->first_name;
-            $lastName = $user->last_name;
-    
-            if (!Hash::check($request->input('recent_password'), $user->password)) {
-                return $this->returnError('Validation Error', 'Recent password is incorrect.', 401);
-            }
-    
-            if (empty($request->input('new_password')) || empty($request->input('confirm_new_password'))) {
-                return $this->returnError('Validation Error', 'New password and confirm new password fields cannot be empty.', 401);
-            }
-    
-            if ($request->input('new_password') !== $request->input('confirm_new_password')) {
-                return $this->returnError('Validation Error', 'New password and confirm new password do not match.', 401);
-            }
-
-            // Add password strength validation here
-            if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $request->input('new_password'))) {
-                return $this->returnError('Validation Error', 'Password must contain at least one uppercase letter, one digit, and be at least 8 characters long.', 400);
-            }
-    
-            $user->password = bcrypt($request->input('new_password'));
-            $user->save();
-
-            $this->PasswordResetSuccessMail($email, $firstName, $lastName);
-    
-            return $this->returnSuccess('Password changed successfully.', 200);
-        } catch (\Throwable $th) {
-            return $this->returnError('Error', $th->getMessage(), 500);
-        }
-    }
     
     /**
      * @OA\Get(
