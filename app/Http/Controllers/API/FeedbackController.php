@@ -112,7 +112,14 @@ class FeedbackController extends BaseController
 
     public function getUserFeedback(Request $request): JsonResponse
     {
-        $user_id = 1; // Hardcoded user ID
+        $user_id = $request->user_id;
+
+        // Check if user exists
+        $user = User::find($request->user_id);
+        
+        if (!$user) {
+            return $this->sendError('User not found.', [], 404);
+        }
     
         // Retrieve feedback for the user
         $feedback = Feedback::where('user_id', $user_id)->first();
