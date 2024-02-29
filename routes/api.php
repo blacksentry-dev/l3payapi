@@ -37,7 +37,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('/users/verify-password-otp', [RegisterController::class, 'verifyResetPasswordOtp']);
     Route::post('/users/reset-password', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
-    // Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
+    Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
+    Route::post('logout', [RegisterController::class, 'logout'])->name('logout');
     
 
     Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
