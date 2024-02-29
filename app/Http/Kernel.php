@@ -43,6 +43,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api', //changed from :api
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBearerToken::class,
         ],
         'cors' => [\App\Http\Middleware\CorsMiddleware::class],
     ];
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cors' => \App\Http\Middleware\CorsMiddleware::class,
+        'auth.api' => \App\Http\Middleware\CheckBearerToken::class,
     ];
 }

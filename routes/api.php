@@ -29,22 +29,22 @@ use App\Http\Controllers\API\PaymentMethodController;
 
 Route::group(['middleware' => 'cors'], function () {
     // Define your API routes here
-    Route::post('register', [RegisterController::class, 'register']);
-    Route::post('login', [RegisterController::class, 'login']);
-    Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail']);
+    Route::post('register', [RegisterController::class, 'register'])->name('register');
+    Route::post('login', [RegisterController::class, 'login'])->name('login');
+    Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail'])->name('verify-email');
     // Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
     Route::post('/users/forgot-password', [RegisterController::class, 'forgotPassword']);
     Route::post('/users/verify-password-otp', [RegisterController::class, 'verifyResetPasswordOtp']);
     Route::post('/users/reset-password', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
     // Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
+    
+
+    Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
+    Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
+    Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
     Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
 
-    Route::middleware('auth:api')->group( function () {
-        Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
-        Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
-        Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
-    });
     //Feedback and Rating
     Route::post('/feedback', [FeedbackController::class, 'submitFeedback']);
     Route::get('/feedback/user/{user_id}', [FeedbackController::class, 'getUserFeedback']);
