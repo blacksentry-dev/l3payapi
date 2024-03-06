@@ -16,6 +16,10 @@ class CorsMiddleware
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
 
+        // Set rate limiting headers
+        // $response->headers->set('X-RateLimit-Limit', $request->header('X-RateLimit-Limit'));
+        // $response->headers->set('X-RateLimit-Remaining', $request->header('X-RateLimit-Remaining'));
+        // $response->headers->set('X-RateLimit-Reset', $request->header('X-RateLimit-Reset'));
         return $response;
     }
 }

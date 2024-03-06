@@ -27,7 +27,8 @@ use App\Http\Controllers\API\PaymentMethodController;
   
 
 
-Route::group(['middleware' => 'cors'], function () {
+Route::group(['middleware' => 'cors'], function () 
+{
     // Define your API routes here
     Route::post('register', [RegisterController::class, 'register'])->name('register');
     Route::post('login', [RegisterController::class, 'login'])->name('login');
