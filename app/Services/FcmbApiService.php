@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
+
 /**
  * Class FcmbApiService.
  */
@@ -32,7 +34,7 @@ class FcmbApiService
             'UTCTimestamp' => $utcTimestamp,
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache',
-            'Ocp-Apim-Subscription-Key' => $this->subscriptionKey,
+            'Ocp-Apim-Subscription-Key' => "50f3a5f76b0045a082ed035e05bc9686",
         ];
 
         // Make the API request to the specified endpoint

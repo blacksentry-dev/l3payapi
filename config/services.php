@@ -32,9 +32,9 @@ return [
     ],
 
     'bank_api' => [
-        'base_url' => env('BANK_API_BASE_URL', 'https://devapi.fcmb.com/OpenAccount-clone'),
+        'base_url' => env('BANK_API_BASE_URL', 'https://devapi.fcmb.com/'),
         'client_id' => env('BANK_API_CLIENT_ID', 250),
-        'subscription_key' => env('BANK_API_SUBSCRIPTION_KEY', 'Layer3pay'),
+        'subscription_key' => env('BANK_API_SUBSCRIPTION_KEY', '50f3a5f76b0045a082ed035e05bc9686'),
     ],
 
 ];

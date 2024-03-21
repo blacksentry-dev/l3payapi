@@ -33,15 +33,14 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('register', [RegisterController::class, 'register'])->name('register');
     Route::post('login', [RegisterController::class, 'login'])->name('login');
     Route::post('/users/verify-email', [RegisterController::class, 'verifyEmail'])->name('verify-email');
-    // Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
     Route::post('/users/forgot-password', [RegisterController::class, 'forgotPassword']);
     Route::post('/users/verify-password-otp', [RegisterController::class, 'verifyResetPasswordOtp']);
     Route::post('/users/reset-password', [RegisterController::class, 'resetPassword']);
     Route::post('/users/resend-otp', [RegisterController::class, 'resendOtp']);
-    Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
-    Route::post('logout', [RegisterController::class, 'logout'])->name('logout');
     
-
+    
+    Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']); 
+    Route::post('logout', [RegisterController::class, 'logout'])->name('logout');
     Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
     Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
     Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
@@ -89,7 +88,11 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('24online/session-usage-detail', [OnlineRenewSubscription::class, 'sessionUsageDetails']);
     Route::post('24online/user-account-status', [OnlineRenewSubscription::class, 'getUserAccountStatus']);
     //FCMB
-    Route::post('fcmbank/account/create', [FcmbWalletController::class, 'createUserBankWalletAccount']);
+    Route::post('fcmb/wallet/create', [FcmbWalletController::class, 'createUserBankWalletAccount']);
+    Route::get('fcmb/get-state', [FcmbWalletController::class, 'getStates']);
+    Route::get('fcmb/get-cities', [FcmbWalletController::class, 'getCities']);
+    Route::post('fcmb/consent/generate-otp', [FcmbWalletController::class, 'generateConsentOPT']);
+    Route::post('fcmb/consent/give-consent', [FcmbWalletController::class, 'giveConsent']);
 
 });
 
