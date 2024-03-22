@@ -93,6 +93,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('fcmb/get-cities', [FcmbWalletController::class, 'getCities']);
     Route::post('fcmb/consent/generate-otp', [FcmbWalletController::class, 'generateConsentOPT']);
     Route::post('fcmb/consent/give-consent', [FcmbWalletController::class, 'giveConsent']);
+    Route::get('fcmb/account/balance', [FcmbWalletController::class, 'getAccountBalance']);
 
 });
 
