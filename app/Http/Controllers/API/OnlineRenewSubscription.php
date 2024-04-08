@@ -70,38 +70,38 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
-    /**
-     * @OA\Post(
-     * path="/api/24online/user-password",
-     * operationId="Get User Password",
-     * tags={"24Online (FTTH Subscription)"},
-     * summary="Get User Password",
-     * description="Get User Password here",
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *              required={"username"},
-     *              @OA\Property(property="username", type="string", description="Username"),
-     *         ),
-     *    ),
-     *      @OA\Response(
-     *          response=201,
-     *          description="Register Successfully",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Register Successfully",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Unprocessable Entity",
-     *          @OA\JsonContent()
-     *       ),
-     *      @OA\Response(response=400, description="Bad request"),
-     *      @OA\Response(response=404, description="Resource Not Found"),
-     * )
-     */
+    // /**
+    //  * @OA\Post(
+    //  * path="/api/24online/user-password",
+    //  * operationId="Get User Password",
+    //  * tags={"24Online (FTTH Subscription)"},
+    //  * summary="Get User Password",
+    //  * description="Get User Password here",
+    //  *     @OA\RequestBody(
+    //  *         @OA\JsonContent(
+    //  *              required={"username"},
+    //  *              @OA\Property(property="username", type="string", description="Username"),
+    //  *         ),
+    //  *    ),
+    //  *      @OA\Response(
+    //  *          response=201,
+    //  *          description="Register Successfully",
+    //  *          @OA\JsonContent()
+    //  *       ),
+    //  *      @OA\Response(
+    //  *          response=200,
+    //  *          description="Register Successfully",
+    //  *          @OA\JsonContent()
+    //  *       ),
+    //  *      @OA\Response(
+    //  *          response=422,
+    //  *          description="Unprocessable Entity",
+    //  *          @OA\JsonContent()
+    //  *       ),
+    //  *      @OA\Response(response=400, description="Bad request"),
+    //  *      @OA\Response(response=404, description="Resource Not Found"),
+    //  * )
+    //  */
     public function getUserPassword(Request $request){
         $url = 'https://102.164.36.86:10080/24online/service/UserService/getUserPassword';
 

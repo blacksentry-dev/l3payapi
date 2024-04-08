@@ -44,7 +44,7 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
-            'expire_in' => 60, // Set the expiration time in minutes (e.g., 24 hours)
+            'expire_in' => 10, // Set the expiration time in minutes (e.g., 24 hours)
         ],
     ],
 
@@ -101,7 +101,7 @@ return [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
             'expire' => 60,
-            'throttle' => 60,
+            'throttle' => 10,
         ],
     ],
 

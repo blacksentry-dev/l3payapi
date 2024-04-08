@@ -205,66 +205,6 @@
                 }
             }
         },
-        "/api/24online/user-password": {
-            "post": {
-                "tags": [
-                    "24Online (FTTH Subscription)"
-                ],
-                "summary": "Get User Password",
-                "description": "Get User Password here",
-                "operationId": "Get User Password",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "username"
-                                ],
-                                "properties": {
-                                    "username": {
-                                        "description": "Username",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Register Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "Register Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/24online/user-status": {
             "post": {
                 "tags": [
