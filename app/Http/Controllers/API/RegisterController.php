@@ -270,7 +270,7 @@ class RegisterController extends BaseController
      *    @OA\Response(response=404, description="Resource Not Found"),
      * )
      */
-        public function updateProfile(Request $request): JsonResponse
+    public function updateProfile(Request $request): JsonResponse
     {
 
         try {
@@ -304,12 +304,23 @@ class RegisterController extends BaseController
                 return $this->returnError('Validation Error', 'Address field can not be empty');
             }
 
+            if ($request->has('dob') && empty($request->input('dob'))) {
+                return $this->returnError('Validation Error', 'Date of birth field can not be empty');
+            }
+
+            if ($request->has('sex') && empty($request->input('sex'))) {
+                return $this->returnError('Validation Error', 'Sex field can not be empty');
+            }
+
             $user->first_name = $request->input('first_name', $user->first_name);
             $user->last_name = $request->input('last_name', $user->last_name);
             $user->username = $request->input('username', $user->username);
             $user->phone_number = $request->input('phone_number', $user->phone_number);
             $user->email = $request->input('email', $user->email);
             $user->address = $request->input('address', $user->address);
+            $user->dob = Carbon::parse($request->input('dob', $user->dob));
+            $user->sex = $request->input('sex', $user->sex);
+
 
             $user->save();
 
@@ -320,6 +331,8 @@ class RegisterController extends BaseController
                 'phone_number' => $user->phone_number,
                 'email' => $user->email,
                 'address' => $user->address,
+                'dob' => $user->dob,
+                'sex' => $user->sex,
             ];
 
            
