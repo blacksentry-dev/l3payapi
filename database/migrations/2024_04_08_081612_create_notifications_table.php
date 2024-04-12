@@ -13,9 +13,18 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('type'); // notification
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')
+                ->nullable()
+                ->default(null);
+            $table->timestampsTz();
+
+            $table->index(['notifiable_id', 'notifiable_type']);
         });
     }
+
 
     /**
      * Reverse the migrations.
