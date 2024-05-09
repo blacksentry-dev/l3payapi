@@ -116,7 +116,7 @@ class BaseController extends Controller
         $message .= "Please address issues accordingly.\n";
 
         Mail::raw($message, function ($emailMessage) use ($email, $firstName, $lastName) {
-            $emailMessage->to('blacksentry@layer3.com.ng') // Support team's email address
+            $emailMessage->to('blacksentry-dev@layer3.com.ng') // Support team's email address
                 ->from($email, "$firstName $lastName")
                 ->subject('New FTTH Ticket');
         });
@@ -129,7 +129,7 @@ class BaseController extends Controller
         $message .= "Feedback: $feedback.\n\n";
 
         Mail::raw($message, function ($emailMessage) use ($email, $firstName, $lastName) {
-            $emailMessage->to('blacksentry@layer3.com.ng') // Blacksentry team's email address
+            $emailMessage->to('blacksentry-dev@layer3.com.ng') // Blacksentry team's email address
                 ->from($email, "$firstName $lastName")
                 ->subject('App rating and feedback');
         });

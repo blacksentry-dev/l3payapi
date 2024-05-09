@@ -70,6 +70,50 @@ class OnlineRenewSubscription extends BaseController
         }
     }
 
+    public function handleAutoRenewal(Request $request)
+    {
+        try {
+            // Check if auto-renewal is enabled in the frontend setting
+            $autoRenewalEnabled = $request->input('auto_renewal_enabled', false);
+
+            if (!$autoRenewalEnabled) {
+                return $this->returnError('Auto-renewal disabled.', 'Auto-renewal is not enabled in the frontend setting.');
+            }
+
+            // Get the user's subscription details (you need to adjust this based on your application's structure)
+            $userSubscription = Subscription::where('user_id', $request->user_id)->first();
+
+            if (!$userSubscription) {
+                return $this->returnError('Subscription not found.', 'User subscription not found.');
+            }
+
+            // Check if the subscription renewal date is reached
+            if ($userSubscription->renewal_date <= now()) {
+                // Call the auto-renewal logic (using the existing RenewSubscription API method)
+                $response = $this->RenewSubscription($request);
+
+                // Handle the response and return appropriate JSON response
+                $responseData = $response->json();
+
+                if ($responseData["responsecode"] == 1) {
+                    // Update the renewal date for the subscription
+                    $userSubscription->update(['renewal_date' => now()->addMonth()]);
+
+                    // Return success message
+                    return $this->returnSuccess('Subscription renewed successfully.', 200);
+                } else {
+                    // Return error message based on the renewal response
+                    return $this->returnError('Error', $responseData["responsemsg"]);
+                }
+            } else {
+                return $this->returnError('Renewal date not reached.', 'Subscription renewal date has not been reached yet.');
+            }
+        } catch (\Exception $e) {
+            // Handle any exceptions during the auto-renewal process
+            return $this->returnError('Error', $e->getMessage(), 500);
+        }
+    }
+
     // /**
     //  * @OA\Post(
     //  * path="/api/24online/user-password",
