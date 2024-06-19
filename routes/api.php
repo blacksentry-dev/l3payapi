@@ -41,7 +41,7 @@ Route::group(['middleware' => 'cors'], function ()
     
     Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']); 
     Route::post('logout', [RegisterController::class, 'logout'])->name('logout');
-    Route::put('/users/profile-update', [RegisterController::class, 'updateProfile']);
+    Route::post('/users/profile-update', [RegisterController::class, 'updateProfile']);
     Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
     Route::post('/users/change-password/{user_id}', [RegisterController::class,'changePassword']);
     Route::get('/users/get-info', [RegisterController::class,'getUserInfo']);
